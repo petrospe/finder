@@ -16,9 +16,9 @@ class CreateEntitiesTable extends Migration
         Schema::create('entities', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedbigInteger('attribute_id')->nullable();
-            $table->bigInteger('parent_id');
+            $table->unsignedbigInteger('parent_id')->nullable();
             $table->unsignedInteger('display_order')->nullable();
-            $table->text('row_value');
+            $table->text('row_value')->nullable();
             $table->unsignedbigInteger('status_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
