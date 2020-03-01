@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use JWTAuth;
 use Illuminate\Http\Request;
 use App\Attribute;
 use App\Http\Resources\AttributeResource;
@@ -15,7 +16,7 @@ class AttributeController extends Controller
      */
     public function index()
     {
-        //
+        return AttributeResource::collection(Attribute::all());
     }
 
     /**
@@ -26,7 +27,11 @@ class AttributeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $attribute = Attribute::create([
+          'name' => $request->name,
+        ]);
+
+        return new AttributeResource($attribute);
     }
 
     /**
@@ -37,7 +42,8 @@ class AttributeController extends Controller
      */
     public function show($id)
     {
-        //
+        $attribute = Attribute::findOrFail($id);
+        return new AttributeResource($attribute);
     }
 
     /**
@@ -49,7 +55,10 @@ class AttributeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $attribute = Attribute::findOrFail($id);
+      $attribute->update($request->all());
+
+      return new AttributeResource($attribute);
     }
 
     /**
@@ -60,6 +69,7 @@ class AttributeController extends Controller
      */
     public function destroy($id)
     {
-        //
+      Attribute::destroy($id);
+      return response()->json(null, 204);
     }
 }
