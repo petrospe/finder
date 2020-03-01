@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use JWTAuth;
+use Socialite;
 use App\User;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -114,9 +115,10 @@ class ApiController extends Controller
 
         $token = JWTAuth::fromUser($user);
 
-        return new JsonResponse([
-            'token' => $token
-        ]);
+        return response()->json([
+            'success'   =>  true,
+            'data'      =>  $token
+        ], 200);
     }
 
     public function redirectToFacebook()
@@ -148,8 +150,9 @@ class ApiController extends Controller
 
         $token = JWTAuth::fromUser($user);
 
-        return new JsonResponse([
-            'token' => $token
-        ]);
+        return response()->json([
+            'success'   =>  true,
+            'data'      =>  $token
+        ], 200);
     }
 }
