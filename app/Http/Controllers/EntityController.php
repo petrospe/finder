@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Attribute;
-use App\Http\Resources\AttributeResource;
+use App\Entity;
+use App\Http\Resources\EntityResource;
 
-class AttributeController extends Controller
+class EntityController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class AttributeController extends Controller
      */
     public function index()
     {
-        return AttributeResource::collection(Attribute::all());
+        return EntityResource::collection(Entity::all());
     }
 
     /**
@@ -26,11 +26,13 @@ class AttributeController extends Controller
      */
     public function store(Request $request)
     {
-        $attribute = Attribute::create([
-          'name' => $request->name,
-        ]);
-
-        return new AttributeResource($attribute);
+      $entity = Entity::create([
+        'attribute_id' => $request->attribute_id,
+        'parent_id' => $request->parent_id,
+        'display_order' => $request->display_order,
+        'row_value' => $request->row_value,
+        'status_id' => $request->status_id,
+      ]);
     }
 
     /**
@@ -41,8 +43,8 @@ class AttributeController extends Controller
      */
     public function show($id)
     {
-        $attribute = Attribute::findOrFail($id);
-        return new AttributeResource($attribute);
+      $entity = Entity::findOrFail($id);
+      return new EntityResource($entity);
     }
 
     /**
@@ -54,10 +56,10 @@ class AttributeController extends Controller
      */
     public function update(Request $request, $id)
     {
-      $attribute = Attribute::findOrFail($id);
-      $attribute->update($request->all());
+      $entity = Entity::findOrFail($id);
+      $entity->update($request->all());
 
-      return new AttributeResource($attribute);
+      return new EntityResource($attribute);
     }
 
     /**
@@ -68,7 +70,7 @@ class AttributeController extends Controller
      */
     public function destroy($id)
     {
-      Attribute::destroy($id);
+      Entity::destroy($id);
       return response()->json(null, 204);
     }
 }

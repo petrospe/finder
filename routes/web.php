@@ -18,6 +18,8 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/clear-cache', 'HomeController@clearCache');
+Route::get('/optimize-db', 'HomeController@optimizeDatabase');
 
 Route::get('auth/google', 'Auth\LoginController@redirectToGoogle');
 Route::get('auth/google/callback', 'Auth\LoginController@handleGoogleCallback');

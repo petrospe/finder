@@ -25,11 +25,12 @@ Route::get('auth/facebook', 'ApiController@redirectToFacebook');
 Route::get('auth/facebook/callback', 'ApiController@handleFacebookCallback');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
-    Route::get('logout', 'ApiController@logout');
-// Route::apiResource('attributes', 'AttributeController');
-    Route::get('attributes', 'AttributeController@index');
-    Route::get('attributes/{id}', 'AttributeController@show');
-    Route::post('attributes', 'AttributeController@store');
-    Route::put('attributes/{id}', 'AttributeController@update');
-    Route::delete('attributes/{id}', 'AttributeController@destroy');
+    // Route::get('logout', 'ApiController@logout');
+    Route::apiResource('attributes', 'AttributeController');
+    Route::apiResource('entities', 'EntityController');
+    // Route::get('attributes', 'AttributeController@index');
+    // Route::get('attributes/{id}', 'AttributeController@show');
+    // Route::post('attributes', 'AttributeController@store');
+    // Route::put('attributes/{id}', 'AttributeController@update');
+    // Route::delete('attributes/{id}', 'AttributeController@destroy');
 });
