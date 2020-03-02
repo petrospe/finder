@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Entity;
+use App\Attribute;
+use App\Status;
 use App\Http\Resources\EntityResource;
 
 class EntityController extends Controller
@@ -72,5 +74,10 @@ class EntityController extends Controller
     {
       Entity::destroy($id);
       return response()->json(null, 204);
+    }
+
+    public function getCategories()
+    {
+      // Entity::where()
     }
 }

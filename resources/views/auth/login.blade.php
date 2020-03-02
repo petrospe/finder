@@ -65,15 +65,16 @@
                             </div>
                         </div>
                     </form>
-                    <div class="form-group row mb-0">
-                      <div class="col-md-3 row-block">
-                       <a href="{{ url('auth/google') }}" class="btn btn-primary">
-                       Login With Google
+                    <hr>
+                    <div class="form-group row mt-3">
+                      <div class="col-md-6 text-right">
+                       <a href="{{ url('auth/google') }}" class="btn btn-primary disabled">
+                       Google Login
                        </a>
                       </div>
-                      <div class="col-md-3 row-block">
-                       <a href="{{ url('auth/facebook') }}" class="btn btn-primary">
-                       Login With Facebook
+                      <div class="col-md-6">
+                       <a href="{{ url('auth/facebook') }}" class="btn btn-primary disabled">
+                       Facebook Login
                        </a>
                       </div>
                     </div>
