@@ -85,14 +85,20 @@ class EntityController extends Controller
       $category = array();
       $categoryIds = array();
       $categories = array();
+      $attributeArr = array();
       if($categoryAttribute){
         $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->get();
         // dd($categoryEntities);
         // die();
         foreach ($categoryEntities as $categoryEntity) {
           $categories = Entity::where('parent_id',$categoryEntity->id)->get();
+          $i=0;
           foreach ($categories as $key => $category) {
               $attribute = Attribute::findOrFail($category->attribute_id);
+
+              ${'attributeArr'.$i} = array($attribute->name =>$category->row_value);
+              $i++;
+              // $categoryInstances[$categoryEntity->id][] = array_push(${'attributeArr'.$i});
               $categoryInstances[$categoryEntity->id][] = array($attribute->name =>$category->row_value);
           }
 
