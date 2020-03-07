@@ -61,7 +61,7 @@ class EntityController extends Controller
       $entity = Entity::findOrFail($id);
       $entity->update($request->all());
 
-      return new EntityResource($attribute);
+      return new EntityResource($entity);
     }
 
     /**
@@ -78,6 +78,27 @@ class EntityController extends Controller
 
     public function getCategories()
     {
-      // Entity::where()
+      $categoryAttribute = Attribute::where('name','category')->first();
+      $status = Status::where('name','Active')->first();
+      $categoryEntities = array();
+      $categoryInstances = array();
+      $category = array();
+      $categoryIds = array();
+      $categories = array();
+      if($categoryAttribute){
+        $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->get();
+        // dd($categoryEntities);
+        // die();
+        foreach ($categoryEntities as $categoryEntity) {
+          $categories = Entity::where('parent_id',$categoryEntity->id)->get();
+          foreach ($categories as $key => $category) {
+              $attribute = Attribute::findOrFail($category->attribute_id);
+              $categoryInstances[$categoryEntity->id][] = array($attribute->name =>$category->row_value);
+          }
+
+        }
+      }
+          // dd($categories);
+          return new EntityResource($categoryInstances);
     }
 }

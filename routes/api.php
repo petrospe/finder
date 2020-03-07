@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     // Route::get('logout', 'ApiController@logout');
     Route::apiResource('attributes', 'AttributeController');
     Route::apiResource('entities', 'EntityController');
+    Route::apiResource('statuses', 'StatusController');
     // Route::get('attributes', 'AttributeController@index');
     // Route::get('attributes/{id}', 'AttributeController@show');
     // Route::post('attributes', 'AttributeController@store');
