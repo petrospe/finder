@@ -90,24 +90,25 @@ class EntityController extends Controller
         $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->get();
         foreach ($categoryEntities as $categoryEntity) {
           $categories = Entity::where('parent_id',$categoryEntity->id)->get();
-          $categoryIds = array('id'=> $categoryEntity->id);
-          $i=0;
-          $len=count($categories);
+          // $categoryIds = array('id'=> $categoryEntity->id);
+          // $i=0;
+          // $len=count($categories);
           foreach ($categories as $category) {
               $attribute = Attribute::findOrFail($category->attribute_id);
-              if(!empty($category->row_value)){
-                ${'attributeArr'.$i} = array($attribute->name =>$category->row_value);
-                $attributeArr = array_merge($attributeArr,${'attributeArr'.$i});
-              }
-              if($i==$len - 1){
-                  $categoryInstances = array_merge($categoryInstances,$categoryIds,$attributeArr);
-                  $categoryInstancesArr [] = $categoryInstances;
-              }
-              $i++;
+              // if(!empty($category->row_value)){
+              //   ${'attributeArr'.$i} = array($attribute->name =>$category->row_value);
+              //   $attributeArr = array_merge($attributeArr,${'attributeArr'.$i});
+              // }
+              // if($i==$len - 1){
+              //     $categoryInstances = array_merge($categoryInstances,$categoryIds,$attributeArr);
+              //     $categoryInstancesArr [] = $categoryInstances;
+              // }
+              // $i++;
+              $categoryInstances[$categoryEntity->id][] = array($attribute->name =>$category->row_value);
           }
         }
       }
 
-      return new EntityResource($categoryInstancesArr);
+      return new EntityResource($categoryInstances);
     }
 }
