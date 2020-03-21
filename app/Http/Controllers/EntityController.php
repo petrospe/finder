@@ -76,39 +76,46 @@ class EntityController extends Controller
       return response()->json(null, 204);
     }
 
-    public function getCategories()
+    public function getCategories($page=1, $per_page=10)
     {
       $categoryAttribute = Attribute::where('name','category')->first();
       $status = Status::where('name','Active')->first();
       $categoryEntities = array();
       $categoryInstances = array();
       $categoryInstancesArr = array();
-      $categoryIds = array();
       $categories = array();
       $attributeArr = array();
       if($categoryAttribute){
         $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->get();
         foreach ($categoryEntities as $categoryEntity) {
           $categories = Entity::where('parent_id',$categoryEntity->id)->get();
-          // $categoryIds = array('id'=> $categoryEntity->id);
-          // $i=0;
-          // $len=count($categories);
+
           foreach ($categories as $category) {
-              $attribute = Attribute::findOrFail($category->attribute_id);
-              // if(!empty($category->row_value)){
-              //   ${'attributeArr'.$i} = array($attribute->name =>$category->row_value);
-              //   $attributeArr = array_merge($attributeArr,${'attributeArr'.$i});
-              // }
-              // if($i==$len - 1){
-              //     $categoryInstances = array_merge($categoryInstances,$categoryIds,$attributeArr);
-              //     $categoryInstancesArr [] = $categoryInstances;
-              // }
-              // $i++;
-              $categoryInstances[$categoryEntity->id][] = array($attribute->name =>$category->row_value);
+              if(!empty($category->row_value)){
+                $attribute = Attribute::findOrFail($category->attribute_id);
+                $categoryInstances[$categoryEntity->id][] = array($attribute->name =>$category->row_value);
+              }
           }
+          $categoryInstancesArr[$categoryEntity->id] = array('id'=> $categoryEntity->id ,'attributes'=> $categoryInstances[$categoryEntity->id]);
         }
       }
 
-      return new EntityResource($categoryInstances);
+    $output = [
+        'results' => [],
+        'meta'    => [],
+    ];
+
+    // Get Results
+    $output['results'] = $categoryInstancesArr;
+
+    // Set Meta
+    $output['meta'] = [
+        'page'        => $page,
+        'per_page'    => $per_page,
+        'count'       => $categoryEntities->count(),
+        'total_pages' => ceil($categoryEntities->count() / $per_page)
+    ];
+
+      return new EntityResource($output);
     }
 }
