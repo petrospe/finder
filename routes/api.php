@@ -36,4 +36,4 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     // Route::delete('attributes/{id}', 'AttributeController@destroy');
 });
 Route::get('item/search', 'EntityController@getActiveCategories');
-Route::get('item/search/{category}/search', 'EntityController@getActiveItems');
+Route::get('item/{category}/search', 'EntityController@getActiveItems');

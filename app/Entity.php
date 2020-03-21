@@ -28,4 +28,19 @@ class Entity extends Model
     {
       return $this->belongsTo(Status::class);
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(Entity::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Entity::class, 'parent_id');
+    }
+
+    public function childrenRecursive()
+    {
+       return $this->children()->with('childrenRecursive');
+    }
 }

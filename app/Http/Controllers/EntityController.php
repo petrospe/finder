@@ -86,7 +86,7 @@ class EntityController extends Controller
       $categories = array();
       $attributeArr = array();
       if($categoryAttribute){
-        $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->get();
+        $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->whereNull('parent_id')->get();
         foreach ($categoryEntities as $categoryEntity) {
           $categories = Entity::where('parent_id',$categoryEntity->id)->get();
 
@@ -123,7 +123,11 @@ class EntityController extends Controller
         return $this->getEntityAttribute('category','Active',$page=1, $per_page=10);
     }
 
-    public function getActiveItems($page=1, $per_page=10){
-        return $this->getEntityAttribute('item','Active',$page=1, $per_page=10);
+    public function getActiveItems($category){
+      $categoryAttribute = Attribute::where('name','item')->first();
+      $status = Status::where('name','Active')->first();
+      $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->where('parent_id',$category)->get();
+
+      return new EntityResource($categoryEntities);
     }
 }
