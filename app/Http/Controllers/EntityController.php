@@ -76,10 +76,10 @@ class EntityController extends Controller
       return response()->json(null, 204);
     }
 
-    public function getCategories($page=1, $per_page=10)
+    public function getEntityAttribute($attributeName, $statusName, $page=1, $per_page=10)
     {
-      $categoryAttribute = Attribute::where('name','category')->first();
-      $status = Status::where('name','Active')->first();
+      $categoryAttribute = Attribute::where('name',$attributeName)->first();
+      $status = Status::where('name',$statusName)->first();
       $categoryEntities = array();
       $categoryInstances = array();
       $categoryInstancesArr = array();
@@ -117,5 +117,13 @@ class EntityController extends Controller
     ];
 
       return new EntityResource($output);
+    }
+
+    public function getActiveCategories($page=1, $per_page=10){
+        return $this->getEntityAttribute('category','Active',$page=1, $per_page=10);
+    }
+
+    public function getActiveItems($page=1, $per_page=10){
+        return $this->getEntityAttribute('item','Active',$page=1, $per_page=10);
     }
 }
