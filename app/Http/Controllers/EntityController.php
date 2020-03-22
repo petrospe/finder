@@ -94,12 +94,18 @@ class EntityController extends Controller
               if(!empty($category->row_value)){
                 $attribute = Attribute::findOrFail($category->attribute_id);
                 $categoryInstances[$categoryEntity->id][] = array($attribute->name =>$category->row_value);
+                // $categoryInstances[$categoryEntity->id][] = implode(', ',array($attribute->name =>$category->row_value));
+                // $categoryInstances[$categoryEntity->id][] = implode(', ', array_map(
+                //     function ($v, $k) { return sprintf("%s:%s", $k, $v); },
+                //     array($attribute->name =>$category->row_value),
+                //     array_keys(array($attribute->name =>$category->row_value))
+                // ));
               }
           }
           $categoryInstancesArr[$categoryEntity->id] = array('id'=> $categoryEntity->id ,'attributes'=> $categoryInstances[$categoryEntity->id]);
         }
       }
-
+// dd($categoryInstancesArr);
     $output = [
         'results' => [],
         'meta'    => [],
