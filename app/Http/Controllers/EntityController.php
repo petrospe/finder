@@ -84,28 +84,24 @@ class EntityController extends Controller
       $categoryInstances = array();
       $categoryInstancesArr = array();
       $categories = array();
-      $attributeArr = array();
       if($categoryAttribute){
         $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->whereNull('parent_id')->get();
         foreach ($categoryEntities as $categoryEntity) {
           $categories = Entity::where('parent_id',$categoryEntity->id)->get();
-
+          $attributeName = array();
+          $attributeRawValue = array();
           foreach ($categories as $category) {
               if(!empty($category->row_value)){
                 $attribute = Attribute::findOrFail($category->attribute_id);
-                $categoryInstances[$categoryEntity->id][] = array($attribute->name =>$category->row_value);
-                // $categoryInstances[$categoryEntity->id][] = implode(', ',array($attribute->name =>$category->row_value));
-                // $categoryInstances[$categoryEntity->id][] = implode(', ', array_map(
-                //     function ($v, $k) { return sprintf("%s:%s", $k, $v); },
-                //     array($attribute->name =>$category->row_value),
-                //     array_keys(array($attribute->name =>$category->row_value))
-                // ));
+                $attributeName[] = $attribute->name;
+                $attributeRawValue[] = $category->row_value;
+                $categoryInstances[$categoryEntity->id] = array_combine($attributeName,$attributeRawValue);
               }
           }
           $categoryInstancesArr[$categoryEntity->id] = array('id'=> $categoryEntity->id ,'attributes'=> $categoryInstances[$categoryEntity->id]);
         }
       }
-// dd($categoryInstancesArr);
+// dd($categoryInstances);
     $output = [
         'results' => [],
         'meta'    => [],
