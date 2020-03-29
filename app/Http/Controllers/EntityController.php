@@ -76,31 +76,41 @@ class EntityController extends Controller
       return response()->json(null, 204);
     }
 
-    public function getEntityAttribute(Request $request=null, $attributeName, $statusName, $parentAttributeId=null, $page=1, $per_page=10)
+    public function getEntityAttribute(Request $request=null, $attributeName, $statusName, $parentEntityId=null, $page=1, $per_page=10)
     {
       $categoryAttribute = Attribute::where('name',$attributeName)->first();
       $status = Status::where('name',$statusName)->first();
       $categoryInstances = array();
       $categoryInstancesArr = array();
       if($categoryAttribute){
-        if(empty($parentAttributeId)){
+        if(empty($parentEntityId)){
           $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->whereNull('parent_id')->get();
         } else {
-          $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->where('parent_id',$parentAttributeId)->get();
+          $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->where('parent_id',$parentEntityId)->get();
         }
         foreach ($categoryEntities as $categoryEntity) {
           $categories = Entity::where('parent_id',$categoryEntity->id)->orderBy('display_order')->get();
           $attributeName = array();
           $attributeRawValue = array();
+          $show = array('show'=>1);
           foreach ($categories as $category) {
               if(!empty($category->row_value)){
                 $attribute = Attribute::findOrFail($category->attribute_id);
+                $requestedName = $attribute->name;
+                if($request->$requestedName){
+                  if($request->$requestedName!=$category->row_value){
+                    $show = array('show'=>0);
+                  }
+                }
                 $attributeName[] = $attribute->name;
                 $attributeRawValue[] = $category->row_value;
-                $categoryInstances[$categoryEntity->id] = array_combine($attributeName,$attributeRawValue);
+                $combinedAttributes = array_combine($attributeName,$attributeRawValue);
+                $categoryInstances[$categoryEntity->id] = array_merge($show,$combinedAttributes);
               }
           }
-          $categoryInstancesArr[$categoryEntity->id] = array('id'=> $categoryEntity->id ,'attributes'=> $categoryInstances[$categoryEntity->id]);
+          if(!empty($categoryInstances[$categoryEntity->id]) && $categoryInstances[$categoryEntity->id]['show']==1){
+            $categoryInstancesArr[$categoryEntity->id] = array('id'=> $categoryEntity->id ,'attributes'=> $categoryInstances[$categoryEntity->id]);
+          }
         }
       }
 // dd($categoryInstances);
