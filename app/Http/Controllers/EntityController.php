@@ -76,18 +76,20 @@ class EntityController extends Controller
       return response()->json(null, 204);
     }
 
-    public function getEntityAttribute($attributeName, $statusName, $page=1, $per_page=10)
+    public function getEntityAttribute(Request $request=null, $attributeName, $statusName, $parentAttributeId=null, $page=1, $per_page=10)
     {
       $categoryAttribute = Attribute::where('name',$attributeName)->first();
       $status = Status::where('name',$statusName)->first();
-      $categoryEntities = array();
       $categoryInstances = array();
       $categoryInstancesArr = array();
-      $categories = array();
       if($categoryAttribute){
-        $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->whereNull('parent_id')->get();
+        if(empty($parentAttributeId)){
+          $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->whereNull('parent_id')->get();
+        } else {
+          $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->where('parent_id',$parentAttributeId)->get();
+        }
         foreach ($categoryEntities as $categoryEntity) {
-          $categories = Entity::where('parent_id',$categoryEntity->id)->get();
+          $categories = Entity::where('parent_id',$categoryEntity->id)->orderBy('display_order')->get();
           $attributeName = array();
           $attributeRawValue = array();
           foreach ($categories as $category) {
@@ -122,45 +124,10 @@ class EntityController extends Controller
     }
 
     public function getActiveCategories($page=1, $per_page=10){
-        return $this->getEntityAttribute('category','Active',$page=1, $per_page=10);
+        return $this->getEntityAttribute(null, 'category', 'Active', null, $page=1, $per_page=10);
     }
 
-    public function getActiveItems($category, $page=1, $per_page=10){
-      $categoryAttribute = Attribute::where('name','item')->first();
-      $status = Status::where('name','Active')->first();
-      $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->where('parent_id',$category)->get();
-      $categoryInstancesArr = array();
-      foreach ($categoryEntities as $categoryEntity) {
-        $categories = Entity::where('parent_id',$categoryEntity->id)->get();
-        $attributeName = array();
-        $attributeRawValue = array();
-        foreach ($categories as $category) {
-            if(!empty($category->row_value)){
-              $attribute = Attribute::findOrFail($category->attribute_id);
-              $attributeName[] = $attribute->name;
-              $attributeRawValue[] = $category->row_value;
-              $categoryInstances[$categoryEntity->id] = array_combine($attributeName,$attributeRawValue);
-            }
-        }
-        $categoryInstancesArr[$categoryEntity->id] = array('id'=> $categoryEntity->id ,'attributes'=> $categoryInstances[$categoryEntity->id]);
-      }
-
-      $output = [
-          'results' => [],
-          'meta'    => [],
-      ];
-
-      // Get Results
-      $output['results'] = $categoryInstancesArr;
-
-      // Set Meta
-      $output['meta'] = [
-          'page'        => $page,
-          'per_page'    => $per_page,
-          'count'       => $categoryEntities->count(),
-          'total_pages' => ceil($categoryEntities->count() / $per_page)
-      ];
-
-      return new EntityResource($output);
+    public function getActiveItems(Request $request, $category, $page=1, $per_page=10){
+      return $this->getEntityAttribute($request, 'item', 'Active', $category, $page=1, $per_page=10);
     }
 }
