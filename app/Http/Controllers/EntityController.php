@@ -146,4 +146,32 @@ class EntityController extends Controller
     public function getActiveItems(Request $request, $category, $page=1, $per_page=10){
       return $this->getEntityAttribute($request, 'item', 'Active', $category, $page=1, $per_page=10);
     }
+
+    public function getActiveItem($itemId){
+      $itemAttribute = Attribute::where('name','Item')->first();
+      $status = Status::where('name','Active')->first();
+      $itemEntity = Entity::where('attribute_id',$itemAttribute->id)->where('status_id',$status->id)->where('id',$itemId)->first();
+      $childInstances = array();
+      $children = Entity::where('parent_id',$itemEntity->id)->orderBy('display_order')->get();
+      $attributeName = array();
+      $attributeRawValue = array();
+      $show = array('show'=>1);
+      foreach ($children as $child) {
+          if(!empty($child->row_value)){
+            $attribute = Attribute::findOrFail($child->attribute_id);
+            $requestedName = $attribute->name;
+            if(!empty($request) && $request->$requestedName){
+              if($request->$requestedName!=$category->row_value){
+                $show = array('show'=>0);
+              }
+            }
+            $attributeName[] = $attribute->name;
+            $attributeRawValue[] = $child->row_value;
+            $combinedAttributes = array_combine($attributeName,$attributeRawValue);
+            $childInstances[$itemEntity->id] = array_merge($show,$combinedAttributes);
+          }
+      }
+      $itemInstancesArr = array('id'=> $itemEntity->id ,'attributes'=> $childInstances[$itemEntity->id]);
+      return $itemInstancesArr;
+      }
 }

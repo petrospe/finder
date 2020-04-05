@@ -10,6 +10,7 @@ class Entity extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'id',
         'attribute_id',
         'parent_id',
         'display_order',
