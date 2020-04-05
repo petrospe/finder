@@ -80,13 +80,19 @@ class EntityController extends Controller
     {
       $categoryAttribute = Attribute::where('name',$attributeName)->first();
       $status = Status::where('name',$statusName)->first();
+      $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
       $categoryInstances = array();
       $categoryInstancesArr = array();
       if($categoryAttribute){
         if(empty($parentEntityId)){
           $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->whereNull('parent_id')->get();
         } else {
-          $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->where('parent_id',$parentEntityId)->get();
+          if(parse_url($actual_link, PHP_URL_QUERY)){
+            $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->where('parent_id',$parentEntityId)->get();
+          } else {
+            $status = Status::where('name','Template')->first();
+            $categoryEntities = Entity::where('attribute_id',$categoryAttribute->id)->where('status_id',$status->id)->where('parent_id',$parentEntityId)->get();
+          }
         }
         foreach ($categoryEntities as $categoryEntity) {
           $categories = Entity::where('parent_id',$categoryEntity->id)->orderBy('display_order')->get();
@@ -97,7 +103,7 @@ class EntityController extends Controller
               if(!empty($category->row_value)){
                 $attribute = Attribute::findOrFail($category->attribute_id);
                 $requestedName = $attribute->name;
-                if($request->$requestedName){
+                if(!empty($request) && $request->$requestedName){
                   if($request->$requestedName!=$category->row_value){
                     $show = array('show'=>0);
                   }
