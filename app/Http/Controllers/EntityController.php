@@ -132,8 +132,8 @@ class EntityController extends Controller
     $output['meta'] = [
         'page'        => $page,
         'per_page'    => $per_page,
-        'count'       => $categoryEntities->count(),
-        'total_pages' => ceil($categoryEntities->count() / $per_page)
+        'count'       => count($categoryInstancesArr),
+        'total_pages' => ceil(count($categoryInstancesArr) / $per_page)
     ];
 
       return new EntityResource($output);
@@ -173,5 +173,5 @@ class EntityController extends Controller
       }
       $itemInstancesArr = array('id'=> $itemEntity->id ,'attributes'=> $childInstances[$itemEntity->id]);
       return $itemInstancesArr;
-      }
+    }
 }

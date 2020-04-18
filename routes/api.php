@@ -19,10 +19,8 @@ use Illuminate\Http\Request;
 Route::post('login', 'ApiController@login');
 Route::post('register', 'ApiController@register');
 
-Route::get('auth/google', 'ApiController@redirectToGoogle');
-Route::get('auth/google/callback', 'ApiController@handleGoogleCallback');
-Route::get('auth/facebook', 'ApiController@redirectToFacebook');
-Route::get('auth/facebook/callback', 'ApiController@handleFacebookCallback');
+Route::get('auth/{provider}', 'ApiController@redirectToProvider');
+Route::get('auth/{provider}/callback', 'ApiController@handleProviderCallback');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     // Route::get('logout', 'ApiController@logout');
@@ -38,3 +36,9 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 Route::get('items/search', 'EntityController@getActiveCategories');
 Route::get('items/{category}/search', 'EntityController@getActiveItems');
 Route::get('item/{id}', 'EntityController@getActiveItem');
+
+// Route::get('item/add', 'EntityController@addCategory');
+// Route::post('item/store', 'EntityController@storeCategory');
+
+// Route::get('item/{category}/add', 'EntityController@addItem');
+// Route::post('item/{category}/store', 'EntityController@storeItem');
