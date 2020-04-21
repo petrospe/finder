@@ -25,26 +25,4 @@ class HomeController extends Controller
     {
         return view('home');
     }
-
-    public function clearCache() {
-        Artisan::call('cache:clear');
-        Artisan::call('route:cache');
-        Artisan::call('config:clear');
-        Artisan::call('view:clear');
-        return "Cache is cleared";
-    }
-
-    public function optimizeDatabase() {
-        try{
-            $alltables = \DB::select('SHOW TABLES');
-            $tables_in_db_name = 'Tables_in_'.env('DB_DATABASE');
-            foreach($alltables as $table){
-                \DB::select("OPTIMIZE TABLE ".$table->$tables_in_db_name);
-                print $table->$tables_in_db_name." optimize OK<br>";
-            }
-        } catch (Exception $e) {
-           print "cannot optimize database. ".$e->getMessage();
-           return false;
-        }
-    }
 }
