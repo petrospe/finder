@@ -150,7 +150,8 @@ class EntityController extends Controller
     public function getActiveEntity($entity,$entityId){
       $itemAttribute = Attribute::where('name',$entity)->first();
       $status = Status::where('name','Active')->first();
-      $itemEntity = Entity::where('attribute_id',$itemAttribute->id)->where('status_id',$status->id)->where('id',$entityId)->first();
+      // $itemEntity = Entity::where('attribute_id',$itemAttribute->id)->where('status_id',$status->id)->where('id',$entityId)->first();
+      $itemEntity = Entity::findOrFail($entityId);
       if($itemEntity){
         $childInstances = array();
         $children = Entity::where('parent_id',$itemEntity->id)->orderBy('display_order')->get();
@@ -179,26 +180,38 @@ class EntityController extends Controller
       }
     }
 
-    public function storeCategory(Request $request){
-      $categoryAttribute = Attribute::where('name','category')->first();
-      $category = new Entity([
-        'attribute_id' => $categoryAttribute->id,
+    public function storeEntity(Request $request, $entity, $parentEntityId=null){
+      $entityAttribute = Attribute::where('name',$entity)->first();
+      $entity = new Entity([
+        'parent_id' => $parentEntityId,
+        'attribute_id' => $entityAttribute->id,
         'status_id' => 1
       ]);
-      $category->save();
+      $entity->save();
       if($request->input()){
+        $i=1;
         foreach ($request->input() as $key => $value) {
           $attribute = Attribute::where('name',$key)->first();
-          $categoryChild = new Entity([
+          $entityChild = new Entity([
             'attribute_id' => $attribute->id,
-            'parent_id' => $category->id,
+            'parent_id' => $entity->id,
+            'display_order' => $i,
             'row_value' => $value,
             'status_id' => 1
           ]);
-          $categoryChild->save();
+          $entityChild->save();
+          $i++;
         }
       }
-      return $this->getActiveEntity('category',$category->id);
+      return $this->getActiveEntity($entity,$entity->id);
+    }
+
+    public function storeCategory(Request $request){
+      return $this->storeEntity($request,'category');
+    }
+
+    public function storeItem(Request $request, $parentEntityId){
+      return $this->storeEntity($request,'item',$parentEntityId);
     }
 
     public function updateEntity(Request $request, $id){
@@ -209,22 +222,26 @@ class EntityController extends Controller
         if($entityArray['show']){
           unset($entityArray['show']);
         }
+        $i=1;
         foreach ($entityArray as $key => $value) {
           $attribute = Attribute::where('name',$key)->first();
           if($attribute){
             $entityChild = Entity::where('attribute_id',$attribute->id)->where('parent_id',$id)->first();
             if($entityChild){
+              $entityChild->display_order = $i;
               $entityChild->row_value = $value;
               $entityChild->save();
             } else {
               $entityChild = Entity::create([
                   'attribute_id' => $attribute->id,
                   'parent_id' => $id,
+                  'display_order' => $i,
                   'row_value' => $value,
                   'status_id' => 1
               ]);
             }
           }
+          $i++;
         }
       }
       return $this->getActiveEntity($entityAttribute->name,$id);

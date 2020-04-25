@@ -40,9 +40,9 @@ Route::post('category/store', 'EntityController@storeCategory');
 
 Route::put('entity/{id}', 'EntityController@updateEntity');
 
-// Route::get('item/{category}/add', 'EntityController@addItem');
-// Route::post('item/{category}/store', 'EntityController@storeItem');
+Route::get('item/{category}/add', 'EntityController@getActiveItems');
+Route::post('item/{categoryid}/store', 'EntityController@storeItem');
 
 Route::get('categories/search', 'EntityController@getActiveCategories');
-Route::get('items/{category}/search', 'EntityController@getActiveItems');
+Route::get('items/{categoryid}/search', 'EntityController@getActiveItems');
 Route::get('{entity}/{id}', 'EntityController@getActiveEntity');
