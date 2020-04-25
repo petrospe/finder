@@ -25,19 +25,20 @@ Route::get('auth/{provider}/callback', 'ApiController@handleProviderCallback');
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', 'ApiController@logout');
     Route::apiResource('attributes', 'AttributeController');
-    Route::apiResource('entities', 'EntityController');
     Route::apiResource('statuses', 'StatusController');
-    // Route::get('attributes', 'AttributeController@index');
-    // Route::get('attributes/{id}', 'AttributeController@show');
-    // Route::post('attributes', 'AttributeController@store');
-    // Route::put('attributes/{id}', 'AttributeController@update');
-    // Route::delete('attributes/{id}', 'AttributeController@destroy');
+    Route::apiResource('entities', 'EntityController');
+    /* Apiresource included routes */
+    // Route::get('entities', 'EntityController@index');
+    // Route::get('entities/{id}', 'EntityController@show');
+    // Route::post('entities', 'EntityController@store');
+    // Route::put('entities/{id}', 'EntityController@update');
+    // Route::delete('entities/{id}', 'EntityController@destroy');
 });
 
 Route::get('category/add', 'AttributeController@index');
 Route::post('category/store', 'EntityController@storeCategory');
 
-// Route::put('{entity}/{id}', 'AttributeController@updateEntity');
+Route::put('entity/{id}', 'EntityController@updateEntity');
 
 // Route::get('item/{category}/add', 'EntityController@addItem');
 // Route::post('item/{category}/store', 'EntityController@storeItem');

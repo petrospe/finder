@@ -200,4 +200,33 @@ class EntityController extends Controller
       }
       return $this->getActiveEntity('category',$category->id);
     }
+
+    public function updateEntity(Request $request, $id){
+      $entity = Entity::findOrFail($id);
+      $entityAttribute = Attribute::findOrFail($entity->attribute_id);
+      $entityArray = $request->input('attributes');
+      if($entityArray){
+        if($entityArray['show']){
+          unset($entityArray['show']);
+        }
+        foreach ($entityArray as $key => $value) {
+          $attribute = Attribute::where('name',$key)->first();
+          if($attribute){
+            $entityChild = Entity::where('attribute_id',$attribute->id)->where('parent_id',$id)->first();
+            if($entityChild){
+              $entityChild->row_value = $value;
+              $entityChild->save();
+            } else {
+              $entityChild = Entity::create([
+                  'attribute_id' => $attribute->id,
+                  'parent_id' => $id,
+                  'row_value' => $value,
+                  'status_id' => 1
+              ]);
+            }
+          }
+        }
+      }
+      return $this->getActiveEntity($entityAttribute->name,$id);
+    }
 }
