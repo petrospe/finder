@@ -118,8 +118,8 @@
 			/*Set Endtime here*/
 			/*Endtime must be > current time*/
 			endtimeYear: 2020,
-			endtimeMonth: 04,
-			endtimeDate: 28,
+			endtimeMonth: 05,
+			endtimeDate: 31,
 			endtimeHours: 22,
 			endtimeMinutes: 0,
 			endtimeSeconds: 0,
