@@ -24,17 +24,23 @@ Route::get('auth/{provider}/callback', 'ApiController@handleProviderCallback');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', 'ApiController@logout');
-    Route::apiResource('attributes', 'AttributeController');
-    Route::apiResource('statuses', 'StatusController');
-    Route::apiResource('entities', 'EntityController');
+
+    Route::group(['middleware' => 'admin'], function () {
+      Route::apiResource('attributes', 'AttributeController');
+      Route::apiResource('statuses', 'StatusController');
+      Route::apiResource('entities', 'EntityController');
+
+      Route::get('category/add', 'AttributeController@index');
+      Route::post('category/store', 'EntityController@storeCategory');
+    });
+
+    Route::apiResource('users', 'UserController');
     /* Apiresource included routes */
     // Route::get('entities', 'EntityController@index');
     // Route::get('entities/{id}', 'EntityController@show');
     // Route::post('entities', 'EntityController@store');
     // Route::put('entities/{id}', 'EntityController@update');
     // Route::delete('entities/{id}', 'EntityController@destroy');
-    Route::get('category/add', 'AttributeController@index');
-    Route::post('category/store', 'EntityController@storeCategory');
 
     Route::put('entity/{id}', 'EntityController@updateEntity');
 
