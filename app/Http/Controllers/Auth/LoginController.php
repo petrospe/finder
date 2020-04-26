@@ -42,15 +42,15 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function redirectToGoogle()
+    public function redirectToProvider($provider)
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
-    public function handleGoogleCallback()
+    public function handleProviderCallback($provider)
     {
         try {
-            $user = Socialite::driver('google')->user();
+            $user = Socialite::driver($provider)->user();
         } catch (\Exception $e) {
             return redirect('/login');
         }
@@ -68,41 +68,8 @@ class LoginController extends Controller
             $newUser = new User;
             $newUser->name = $user->name;
             $newUser->email = $user->email;
-            $newUser->google_id = $user->id;
-            $newUser->password = \Hash::make(\Str::random(8));
-            $newUser->save();
-            auth()->login($newUser, true);
-        }
-        return redirect()->to('/home');
-    }
-
-    public function redirectToFacebook()
-    {
-        return Socialite::driver('facebook')->redirect();
-    }
-
-    public function handleFacebookCallback()
-    {
-        try {
-            $user = Socialite::driver('facebook')->user();
-        } catch (\Exception $e) {
-            return redirect('/login');
-        }
-        // only allow people with @company.com to login
-        // if(explode("@", $user->email)[1] !== 'company.com'){
-        //     return redirect()->to('/');
-        // }
-        // check if they're an existing user
-        $existingUser = User::where('email', $user->email)->first();
-        if($existingUser){
-            // log them in
-            auth()->login($existingUser, true);
-        } else {
-            // create a new user
-            $newUser = new User;
-            $newUser->name = $user->name;
-            $newUser->email = $user->email;
-            $newUser->facebook_id = $user->id;
+            $newUser->provider_id = $user->id;
+            $newUser->provider = $provider;
             $newUser->password = \Hash::make(\Str::random(8));
             $newUser->save();
             auth()->login($newUser, true);

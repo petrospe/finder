@@ -105,6 +105,10 @@ class ApiController extends Controller
         // but you could set other things like avatar or gender
         if (!$user->exists) {
             $user->name = $providerUser->getName();
+            $user->email = $providerUser->getEmail();
+            $user->provider_id = $providerUser->getId();
+            $user->provider = $provider;
+            $user->password = \Hash::make(\Str::random(8));
             $user->save();
         }
 
@@ -119,5 +123,22 @@ class ApiController extends Controller
             'success'   =>  true,
             'data'      =>  $token
         ], 200);
+    }
+
+    public function getAuthenticatedUser()
+    {
+        try {
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return response()->json(['token_expired'], $e->getStatusCode());
+        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json(['token_invalid'], $e->getStatusCode());
+        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json(['token_absent'], $e->getStatusCode());
+        }
+
+        return response()->json(compact('user'));
     }
 }

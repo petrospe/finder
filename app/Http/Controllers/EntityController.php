@@ -10,6 +10,12 @@ use App\Http\Resources\EntityResource;
 
 class EntityController extends Controller
 {
+    protected $user;
+
+    public function __construct()
+    {
+      $this->user = \JWTAuth::parseToken()->authenticate();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -34,6 +40,7 @@ class EntityController extends Controller
         'display_order' => $request->display_order,
         'row_value' => $request->row_value,
         'status_id' => $request->status_id,
+        'user_id' => $this->user->id,
       ]);
     }
 
@@ -180,12 +187,13 @@ class EntityController extends Controller
       }
     }
 
-    public function storeEntity(Request $request, $entity, $parentEntityId=null){
-      $entityAttribute = Attribute::where('name',$entity)->first();
+    public function storeEntity(Request $request, $entityType, $parentEntityId=null){
+      $entityAttribute = Attribute::where('name',$entityType)->first();
       $entity = new Entity([
         'parent_id' => $parentEntityId,
         'attribute_id' => $entityAttribute->id,
-        'status_id' => 1
+        'status_id' => 1,
+        'user_id' => $this->user->id
       ]);
       $entity->save();
       if($request->input()){
