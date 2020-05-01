@@ -14,9 +14,10 @@
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/', function () {
-    return view('comingsoon');
-});
+// Route::get('/', function () {
+//     return view('comingsoon');
+// });
+Route::get('/{any}', 'SinglePageController@index')->where('any', '.*');
 
 Auth::routes(['register' => false]);
 
