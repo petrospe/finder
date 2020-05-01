@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Index from './views/Index.vue'
 import Login from './views/Login.vue'
 import Home from './views/Home.vue'
+import CategoriesSearch from './views/CategoriesSearch'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const router = new VueRouter({
           name:'Home',
           component:Home
       },
+      {
+        path:'/categories/search',
+        name:'categories.search',
+        component:CategoriesSearch
+      }
     ]
 })
 

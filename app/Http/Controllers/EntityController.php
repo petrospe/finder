@@ -15,7 +15,7 @@ class EntityController extends Controller
 
     public function __construct()
     {
-      $this->user = \JWTAuth::parseToken()->authenticate();
+      $this->user = auth()->user();
     }
     /**
      * Display a listing of the resource.

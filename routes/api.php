@@ -23,7 +23,7 @@ Route::get('auth/{provider}', 'ApiController@redirectToProvider');
 Route::get('auth/{provider}/callback', 'ApiController@handleProviderCallback');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
-    Route::get('logout', 'ApiController@logout');
+    Route::post('logout', 'ApiController@logout');
 
     Route::group(['middleware' => 'admin'], function () {
       Route::apiResource('attributes', 'AttributeController');
