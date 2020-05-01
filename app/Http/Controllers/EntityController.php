@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Entity;
 use App\Attribute;
 use App\Status;
+use App\File;
 use App\Http\Resources\EntityResource;
 
 class EntityController extends Controller
@@ -211,6 +212,9 @@ class EntityController extends Controller
           $i++;
         }
       }
+      if($request->file){
+        $this->uploadFile($request);
+      }
       return $this->getActiveEntity($entity,$entity->id);
     }
 
@@ -253,5 +257,30 @@ class EntityController extends Controller
         }
       }
       return $this->getActiveEntity($entityAttribute->name,$id);
+    }
+
+    protected function uploadFile(Request $request) {
+        $file = Input::file('file');
+        $filename = $file->getClientOriginalName();
+
+        $path = hash( 'sha256', time());
+
+        if(Storage::disk('uploads')->put($path.'/'.$filename,  File::get($file))) {
+            $input['name'] = $filename;
+            $input['type'] = $file->getClientMimeType();
+            $input['path'] = $path;
+            $input['size'] = $file->getClientSize();
+            $input['user_id'] = $this->user->id;
+            $input['entity_id'] = $request->entity_id;
+            $file = File::create($input);
+
+            return response()->json([
+                'success' => true,
+                'id' => $file->id
+            ], 200);
+        }
+        return response()->json([
+            'success' => false
+        ], 500);
     }
 }
