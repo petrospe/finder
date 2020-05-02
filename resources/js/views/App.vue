@@ -1,23 +1,37 @@
 <template>
   <v-app id="inspire">
-  <v-app-bar
-    app
-    color="indigo"
-    dark
+    <v-card
+    flat
+    height="100%"
+    tile
   >
-  <router-link :to="{ name: 'Login' }">Login</router-link> |
-  <router-link :to="{ name: 'categories.search' }">Find</router-link> |
-  <router-link :to="{ name: 'Entry' }">New Entry</router-link> |
-  </v-app-bar>
-    <router-view></router-view>
+    <v-toolbar dense color="indigo darken-1">
+     <v-img src="images/icons/logo.png" max-width="130px"></v-img>
+     <v-spacer></v-spacer>
+     <router-link :to="{ name: 'Login' }">
+       <v-btn icon>
+         <v-icon>mdi-login-variant</v-icon>
+         <span>Login</span>
+     </v-btn>
+     </router-link>
+   </v-toolbar>
+
+ </v-card>
+ <router-view></router-view>
     <v-footer
-      color="indigo"
+      color="indigo darken-1"
       app
     >
-      <span class="white--text">&copy; 2019</span>
+      <span class="white--text">&copy; {{ currentDate.getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
 <script>
-    export default {}
+    export default {
+      data(){
+         return {
+            currentDate: new Date,
+            }
+     }
+    }
 </script>

@@ -1961,7 +1961,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      currentDate: new Date()
+    };
+  }
+});
 
 /***/ }),
 
@@ -2137,6 +2151,42 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -38261,29 +38311,49 @@ var render = function() {
     { attrs: { id: "inspire" } },
     [
       _c(
-        "v-app-bar",
-        { attrs: { app: "", color: "indigo", dark: "" } },
+        "v-card",
+        { attrs: { flat: "", height: "100%", tile: "" } },
         [
-          _c("router-link", { attrs: { to: { name: "Login" } } }, [
-            _vm._v("Login")
-          ]),
-          _vm._v(" |\n"),
-          _c("router-link", { attrs: { to: { name: "categories.search" } } }, [
-            _vm._v("Find")
-          ]),
-          _vm._v(" |\n"),
-          _c("router-link", { attrs: { to: { name: "Entry" } } }, [
-            _vm._v("New Entry")
-          ]),
-          _vm._v(" |\n")
+          _c(
+            "v-toolbar",
+            { attrs: { dense: "", color: "indigo darken-1" } },
+            [
+              _c("v-img", {
+                attrs: { src: "images/icons/logo.png", "max-width": "130px" }
+              }),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                { attrs: { to: { name: "Login" } } },
+                [
+                  _c(
+                    "v-btn",
+                    { attrs: { icon: "" } },
+                    [
+                      _c("v-icon", [_vm._v("mdi-login-variant")]),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Login")])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       ),
       _vm._v(" "),
       _c("router-view"),
       _vm._v(" "),
-      _c("v-footer", { attrs: { color: "indigo", app: "" } }, [
-        _c("span", { staticClass: "white--text" }, [_vm._v("© 2019")])
+      _c("v-footer", { attrs: { color: "indigo darken-1", app: "" } }, [
+        _c("span", { staticClass: "white--text" }, [
+          _vm._v("© " + _vm._s(_vm.currentDate.getFullYear()))
+        ])
       ])
     ],
     1
@@ -38580,26 +38650,101 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "p",
-      [
-        _c("router-link", { attrs: { to: { name: "Login" } } }, [
-          _vm._v("Login")
-        ]),
-        _vm._v(" |\n        "),
-        _c("router-link", { attrs: { to: { name: "categories.search" } } }, [
-          _vm._v("Find")
-        ]),
-        _vm._v(" |\n        "),
-        _c("router-link", { attrs: { to: { name: "Entry" } } }, [
-          _vm._v("New Entry")
-        ]),
-        _vm._v(" |\n    ")
-      ],
-      1
-    )
-  ])
+  return _c(
+    "v-app",
+    { attrs: { id: "inspire" } },
+    [
+      _c(
+        "v-content",
+        [
+          _c(
+            "v-container",
+            { staticClass: "fill-height", attrs: { fluid: "" } },
+            [
+              _c(
+                "v-row",
+                { attrs: { align: "center", justify: "center" } },
+                [
+                  _c(
+                    "v-col",
+                    { staticClass: "text-center" },
+                    [
+                      _c(
+                        "v-tooltip",
+                        { attrs: { left: "" } },
+                        [
+                          _c(
+                            "router-link",
+                            { attrs: { to: { name: "categories.search" } } },
+                            [
+                              _c(
+                                "v-btn",
+                                { attrs: { icon: "", large: "" } },
+                                [
+                                  _c("v-icon", { attrs: { large: "" } }, [
+                                    _vm._v("mdi-code-tags")
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("span", [_vm._v("Source")])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-tooltip",
+                        { attrs: { right: "" } },
+                        [
+                          _c(
+                            "router-link",
+                            { attrs: { to: { name: "Entry" } } },
+                            [
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: {
+                                    icon: "",
+                                    large: "",
+                                    href:
+                                      "https://codepen.io/johnjleider/pen/zgxeLQ",
+                                    target: "_blank"
+                                  }
+                                },
+                                [
+                                  _c("v-icon", { attrs: { large: "" } }, [
+                                    _vm._v("mdi-codepen")
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("span", [_vm._v("Codepen")])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
