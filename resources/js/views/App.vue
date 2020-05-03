@@ -1,6 +1,5 @@
 <template>
   <v-app id="inspire">
-
     <v-navigation-drawer
       v-model="drawer"
       app
@@ -25,11 +24,10 @@
       </v-list>
     </v-navigation-drawer>
 
-
-      <v-app-bar app color="indigo darken-1">
+    <v-app-bar app color="blue-grey darken-1">
         <v-app-bar-nav-icon class="white--text" @click.stop="drawer = !drawer" />
         <router-link :to="{ name: 'Index' }">
-          <v-img src="images/icons/logo.png" max-width="130px"></v-img>
+          <v-img src="/images/icons/logo.png" max-width="130px"></v-img>
         </router-link>
        <v-spacer></v-spacer>
        <router-link :to="{ name: 'Login' }">
@@ -38,21 +36,29 @@
            <span>Login</span>
        </v-btn>
        </router-link>
-     </v-app-bar>
-     <router-view></router-view>
-      <v-footer
-        color="indigo darken-1"
-        app
-      >
-        <span class="white--text">&copy; {{ currentDate.getFullYear() }}</span>
-      </v-footer>
+    </v-app-bar>
+
+    <router-view></router-view>
+
+    <v-footer
+      color="blue-grey darken-1"
+      app
+    >
+      <span class="white--text">&copy; {{ currentDate.getFullYear() }}</span>
+    </v-footer>
   </v-app>
 </template>
 <script>
+  let jwt = localStorage.getItem('jwt');
+  if(jwt){
+    window.axios.defaults.headers.common['Authorization'] = `bearer ${jwt}`;
+  } else {
+    console.error('JWT token not found')
+  }
     export default {
       data(){
         return {
-          drawer: null,
+            drawer: null,
             currentDate: new Date,
         }
       }

@@ -1991,6 +1991,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+var jwt = localStorage.getItem('jwt');
+
+if (jwt) {
+  window.axios.defaults.headers.common['Authorization'] = "bearer ".concat(jwt);
+} else {
+  console.error('JWT token not found');
+}
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2031,10 +2039,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      alignment: 'center',
+      dense: false,
+      justify: 'center',
       loading: false,
       categoriesSearch: null,
       error: null
@@ -2045,10 +2082,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     fetchData: function fetchData() {
+      var _this = this;
+
       this.error = this.categoriesSearch = null;
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/categories/search').then(function (response) {
-        console.log(response.data);
+        _this.categoriesSearch = response.data;
+        console.log(_this.categoriesSearch);
+      })["catch"](function (response) {
+        console.log(response.data.error);
+      })["finally"](function () {
+        return _this.loading = false;
       });
     }
   }
@@ -2188,14 +2232,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -38352,7 +38388,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-app-bar",
-        { attrs: { app: "", color: "indigo darken-1" } },
+        { attrs: { app: "", color: "blue-grey darken-1" } },
         [
           _c("v-app-bar-nav-icon", {
             staticClass: "white--text",
@@ -38369,7 +38405,7 @@ var render = function() {
             { attrs: { to: { name: "Index" } } },
             [
               _c("v-img", {
-                attrs: { src: "images/icons/logo.png", "max-width": "130px" }
+                attrs: { src: "/images/icons/logo.png", "max-width": "130px" }
               })
             ],
             1
@@ -38400,7 +38436,7 @@ var render = function() {
       _vm._v(" "),
       _c("router-view"),
       _vm._v(" "),
-      _c("v-footer", { attrs: { color: "indigo darken-1", app: "" } }, [
+      _c("v-footer", { attrs: { color: "blue-grey darken-1", app: "" } }, [
         _c("span", { staticClass: "white--text" }, [
           _vm._v("© " + _vm._s(_vm.currentDate.getFullYear()))
         ])
@@ -38431,36 +38467,92 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "categoriesSearch" }, [
-    _vm.loading
-      ? _c("div", { staticClass: "loading" }, [
-          _vm._v("\n        Loading...\n    ")
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.error
-      ? _c("div", { staticClass: "error" }, [
-          _vm._v("\n        " + _vm._s(_vm.error) + "\n    ")
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.categoriesSearch
-      ? _c(
-          "ul",
-          _vm._l(_vm.categoriesSearch, function(ref) {
-            var name = ref.name
-            var desciption = ref.desciption
-            return _c("li", [
-              _c("strong", [_vm._v("Name:")]),
-              _vm._v(" " + _vm._s(name) + ",\n            "),
-              _c("strong", [_vm._v("Desciption:")]),
-              _vm._v(" " + _vm._s(desciption) + "\n        ")
-            ])
-          }),
-          0
-        )
-      : _vm._e()
-  ])
+  return _c(
+    "v-app",
+    { attrs: { id: "inspire" } },
+    [
+      _c(
+        "v-content",
+        [
+          _c(
+            "v-container",
+            { attrs: { fluid: "" } },
+            [
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12" } },
+                    [
+                      _c(
+                        "v-row",
+                        {
+                          staticClass: "grey lighten-5",
+                          staticStyle: { height: "300px" },
+                          attrs: { align: _vm.alignment, justify: _vm.justify }
+                        },
+                        _vm._l(3, function(n) {
+                          return _c(
+                            "v-card",
+                            {
+                              key: n,
+                              staticClass: "ma-3 pa-6",
+                              attrs: { outlined: "", tile: "" }
+                            },
+                            [_vm._v("\n            Column\n          ")]
+                          )
+                        }),
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "categoriesSearch" }, [
+                _vm.loading
+                  ? _c("div", { staticClass: "loading" }, [
+                      _vm._v("\n            Loading...\n        ")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.error
+                  ? _c("div", { staticClass: "error" }, [
+                      _vm._v(
+                        "\n            " + _vm._s(_vm.error) + "\n        "
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.categoriesSearch
+                  ? _c(
+                      "ul",
+                      _vm._l(_vm.categoriesSearch, function(categorySearch) {
+                        return _c("li", [
+                          _c("strong", [_vm._v("Name:")]),
+                          _vm._v(
+                            " " +
+                              _vm._s(categorySearch.results) +
+                              ",\n            "
+                          )
+                        ])
+                      }),
+                      0
+                    )
+                  : _vm._e()
+              ])
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -38772,88 +38864,17 @@ var render = function() {
                         [
                           _c(
                             "v-toolbar",
-                            { attrs: { color: "primary", dark: "", flat: "" } },
+                            {
+                              attrs: {
+                                color: "blue-grey darken-1",
+                                dark: "",
+                                flat: ""
+                              }
+                            },
                             [
                               _c("v-toolbar-title", [_vm._v("Login form")]),
                               _vm._v(" "),
-                              _c("v-spacer"),
-                              _vm._v(" "),
-                              _c(
-                                "v-tooltip",
-                                {
-                                  attrs: { bottom: "" },
-                                  scopedSlots: _vm._u([
-                                    {
-                                      key: "activator",
-                                      fn: function(ref) {
-                                        var on = ref.on
-                                        return [
-                                          _c(
-                                            "v-btn",
-                                            _vm._g(
-                                              {
-                                                attrs: {
-                                                  href: _vm.source,
-                                                  icon: "",
-                                                  large: "",
-                                                  target: "_blank"
-                                                }
-                                              },
-                                              on
-                                            ),
-                                            [
-                                              _c("v-icon", [
-                                                _vm._v("mdi-code-tags")
-                                              ])
-                                            ],
-                                            1
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ])
-                                },
-                                [_vm._v(" "), _c("span", [_vm._v("Source")])]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-tooltip",
-                                {
-                                  attrs: { right: "" },
-                                  scopedSlots: _vm._u([
-                                    {
-                                      key: "activator",
-                                      fn: function(ref) {
-                                        var on = ref.on
-                                        return [
-                                          _c(
-                                            "v-btn",
-                                            _vm._g(
-                                              {
-                                                attrs: {
-                                                  icon: "",
-                                                  large: "",
-                                                  href:
-                                                    "https://codepen.io/johnjleider/pen/pMvGQO",
-                                                  target: "_blank"
-                                                }
-                                              },
-                                              on
-                                            ),
-                                            [
-                                              _c("v-icon", [
-                                                _vm._v("mdi-codepen")
-                                              ])
-                                            ],
-                                            1
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ])
-                                },
-                                [_vm._v(" "), _c("span", [_vm._v("Codepen")])]
-                              )
+                              _c("v-spacer")
                             ],
                             1
                           ),
@@ -38893,6 +38914,30 @@ var render = function() {
                             "v-card-actions",
                             [
                               _c("v-spacer"),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                { attrs: { color: "primary" } },
+                                [
+                                  _c("v-icon", [_vm._v("mdi-google")]),
+                                  _vm._v(
+                                    "\n                Login\n              "
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                { attrs: { color: "primary" } },
+                                [
+                                  _c("v-icon", [_vm._v("mdi-facebook")]),
+                                  _vm._v(
+                                    "\n                Login\n              "
+                                  )
+                                ],
+                                1
+                              ),
                               _vm._v(" "),
                               _c("v-btn", { attrs: { color: "primary" } }, [
                                 _vm._v("Login")
