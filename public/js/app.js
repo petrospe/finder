@@ -1969,9 +1969,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      drawer: null,
       currentDate: new Date()
     };
   }
@@ -2092,51 +2115,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     source: String
-  },
-  data: function data() {
-    return {
-      drawer: null
-    };
   }
 });
 
@@ -2190,13 +2171,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    source: String
+  }
+});
 
 /***/ }),
 
@@ -38311,33 +38290,104 @@ var render = function() {
     { attrs: { id: "inspire" } },
     [
       _c(
-        "v-card",
-        { attrs: { flat: "", height: "100%", tile: "" } },
+        "v-navigation-drawer",
+        {
+          attrs: { app: "" },
+          model: {
+            value: _vm.drawer,
+            callback: function($$v) {
+              _vm.drawer = $$v
+            },
+            expression: "drawer"
+          }
+        },
         [
           _c(
-            "v-toolbar",
-            { attrs: { dense: "", color: "indigo darken-1" } },
+            "v-list",
+            { attrs: { dense: "" } },
+            [
+              _c(
+                "v-list-item",
+                { attrs: { link: "" } },
+                [
+                  _c(
+                    "v-list-item-action",
+                    [_c("v-icon", [_vm._v("mdi-home")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item-content",
+                    [_c("v-list-item-title", [_vm._v("Home")])],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
+                { attrs: { link: "" } },
+                [
+                  _c(
+                    "v-list-item-action",
+                    [_c("v-icon", [_vm._v("mdi-contact-mail")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item-content",
+                    [_c("v-list-item-title", [_vm._v("Contact")])],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-app-bar",
+        { attrs: { app: "", color: "indigo darken-1" } },
+        [
+          _c("v-app-bar-nav-icon", {
+            staticClass: "white--text",
+            on: {
+              click: function($event) {
+                $event.stopPropagation()
+                _vm.drawer = !_vm.drawer
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "router-link",
+            { attrs: { to: { name: "Index" } } },
             [
               _c("v-img", {
                 attrs: { src: "images/icons/logo.png", "max-width": "130px" }
-              }),
-              _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "router-link",
+            { attrs: { to: { name: "Login" } } },
+            [
               _c(
-                "router-link",
-                { attrs: { to: { name: "Login" } } },
+                "v-btn",
+                { staticClass: "white--text", attrs: { icon: "" } },
                 [
-                  _c(
-                    "v-btn",
-                    { attrs: { icon: "" } },
-                    [
-                      _c("v-icon", [_vm._v("mdi-login-variant")]),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Login")])
-                    ],
-                    1
-                  )
+                  _c("v-icon", [_vm._v("mdi-login-variant")]),
+                  _vm._v(" "),
+                  _c("span", [_vm._v("Login")])
                 ],
                 1
               )
@@ -38438,85 +38488,6 @@ var render = function() {
     "v-app",
     { attrs: { id: "inspire" } },
     [
-      _c(
-        "v-navigation-drawer",
-        {
-          attrs: { app: "" },
-          model: {
-            value: _vm.drawer,
-            callback: function($$v) {
-              _vm.drawer = $$v
-            },
-            expression: "drawer"
-          }
-        },
-        [
-          _c(
-            "v-list",
-            { attrs: { dense: "" } },
-            [
-              _c(
-                "v-list-item",
-                { attrs: { link: "" } },
-                [
-                  _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-home")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item-content",
-                    [_c("v-list-item-title", [_vm._v("Home")])],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
-                { attrs: { link: "" } },
-                [
-                  _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-contact-mail")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item-content",
-                    [_c("v-list-item-title", [_vm._v("Contact")])],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-app-bar",
-        { attrs: { app: "", color: "indigo", dark: "" } },
-        [
-          _c("v-app-bar-nav-icon", {
-            on: {
-              click: function($event) {
-                $event.stopPropagation()
-                _vm.drawer = !_vm.drawer
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("v-toolbar-title", [_vm._v("Application")])
-        ],
-        1
-      ),
-      _vm._v(" "),
       _c(
         "v-content",
         [
@@ -38619,11 +38590,7 @@ var render = function() {
           )
         ],
         1
-      ),
-      _vm._v(" "),
-      _c("v-footer", { attrs: { color: "indigo", app: "" } }, [
-        _c("span", { staticClass: "white--text" }, [_vm._v("© 2019")])
-      ])
+      )
     ],
     1
   )
@@ -38671,64 +38638,76 @@ var render = function() {
                     [
                       _c(
                         "v-tooltip",
-                        { attrs: { left: "" } },
-                        [
-                          _c(
-                            "router-link",
-                            { attrs: { to: { name: "categories.search" } } },
-                            [
-                              _c(
-                                "v-btn",
-                                { attrs: { icon: "", large: "" } },
-                                [
-                                  _c("v-icon", { attrs: { large: "" } }, [
-                                    _vm._v("mdi-code-tags")
-                                  ])
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("span", [_vm._v("Source")])
-                            ],
-                            1
-                          )
-                        ],
-                        1
+                        {
+                          attrs: { left: "" },
+                          scopedSlots: _vm._u([
+                            {
+                              key: "activator",
+                              fn: function(ref) {
+                                var on = ref.on
+                                return [
+                                  _c(
+                                    "v-btn",
+                                    _vm._g(
+                                      {
+                                        attrs: {
+                                          to: { name: "categories.search" },
+                                          icon: "",
+                                          large: ""
+                                        }
+                                      },
+                                      on
+                                    ),
+                                    [
+                                      _c("v-icon", { attrs: { large: "" } }, [
+                                        _vm._v("mdi-magnify")
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ]
+                              }
+                            }
+                          ])
+                        },
+                        [_vm._v(" "), _c("span", [_vm._v("Find")])]
                       ),
                       _vm._v(" "),
                       _c(
                         "v-tooltip",
-                        { attrs: { right: "" } },
-                        [
-                          _c(
-                            "router-link",
-                            { attrs: { to: { name: "Entry" } } },
-                            [
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: {
-                                    icon: "",
-                                    large: "",
-                                    href:
-                                      "https://codepen.io/johnjleider/pen/zgxeLQ",
-                                    target: "_blank"
-                                  }
-                                },
-                                [
-                                  _c("v-icon", { attrs: { large: "" } }, [
-                                    _vm._v("mdi-codepen")
-                                  ])
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("span", [_vm._v("Codepen")])
-                            ],
-                            1
-                          )
-                        ],
-                        1
+                        {
+                          attrs: { right: "" },
+                          scopedSlots: _vm._u([
+                            {
+                              key: "activator",
+                              fn: function(ref) {
+                                var on = ref.on
+                                return [
+                                  _c(
+                                    "v-btn",
+                                    _vm._g(
+                                      {
+                                        attrs: {
+                                          to: { name: "Home" },
+                                          icon: "",
+                                          large: ""
+                                        }
+                                      },
+                                      on
+                                    ),
+                                    [
+                                      _c("v-icon", { attrs: { large: "" } }, [
+                                        _vm._v("mdi-pencil-plus-outline")
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ]
+                              }
+                            }
+                          ])
+                        },
+                        [_vm._v(" "), _c("span", [_vm._v("New Entry")])]
                       )
                     ],
                     1
