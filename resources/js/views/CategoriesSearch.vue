@@ -3,7 +3,25 @@
     <v-content>
   <v-container fluid>
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" class="categoriesSearch">
+        <v-row
+          :align="alignment"
+          :justify="justify"
+          class="grey lighten-5 loading"
+          style="height: 300px;"
+          v-if="loading"
+        >
+          <v-card>Loading...</v-card>
+        </v-row>
+        <v-row
+          :align="alignment"
+          :justify="justify"
+          class="grey lighten-5 error"
+          style="height: 300px;"
+          v-if="error"
+        >
+          <v-card>{{ error }}</v-card>
+        </v-row>
         <v-row
           :align="alignment"
           :justify="justify"
@@ -11,33 +29,22 @@
           style="height: 300px;"
         >
           <v-card
-            v-for="n in 3"
-            :key="n"
+            v-for="categorySearch in categoriesSearch"
+            :key="categorySearch.id"
             class="ma-3 pa-6"
             outlined
             tile
           >
-            Column
+          <div class="title">
+            {{ categorySearch.attributes.name}}
+          </div>
+          <div class="subtitle-1">
+            {{ categorySearch.attributes.description}}
+          </div>
           </v-card>
         </v-row>
       </v-col>
     </v-row>
-    <div class="categoriesSearch">
-        <div class="loading" v-if="loading">
-            Loading...
-        </div>
-
-        <div v-if="error" class="error">
-            {{ error }}
-        </div>
-
-        <ul v-if="categoriesSearch">
-            <li v-for="categorySearch in categoriesSearch">
-                <strong>Name:</strong> {{ categorySearch.results}},
-            </li>
-        </ul>
-    </div>
-
   </v-container>
 </v-content>
 </v-app>
@@ -51,7 +58,7 @@ export default {
             dense: false,
             justify: 'center',
             loading: false,
-            categoriesSearch: null,
+            categoriesSearch: [],
             error: null
         };
     },
@@ -65,8 +72,9 @@ export default {
             axios
                 .get('/api/categories/search')
                 .then(response => {
-                  this.categoriesSearch = response.data;
+                  this.categoriesSearch = JSON.parse(JSON.stringify(response.data)).data.results;
                   console.log(this.categoriesSearch);
+                  // debugger;
                 })
                 .catch(response => {
                   console.log(response.data.error)

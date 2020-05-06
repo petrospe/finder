@@ -2065,6 +2065,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2073,7 +2080,7 @@ __webpack_require__.r(__webpack_exports__);
       dense: false,
       justify: 'center',
       loading: false,
-      categoriesSearch: null,
+      categoriesSearch: [],
       error: null
     };
   },
@@ -2087,8 +2094,8 @@ __webpack_require__.r(__webpack_exports__);
       this.error = this.categoriesSearch = null;
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/categories/search').then(function (response) {
-        _this.categoriesSearch = response.data;
-        console.log(_this.categoriesSearch);
+        _this.categoriesSearch = JSON.parse(JSON.stringify(response.data)).data.results;
+        console.log(_this.categoriesSearch); // debugger;
       })["catch"](function (response) {
         console.log(response.data.error);
       })["finally"](function () {
@@ -38483,8 +38490,40 @@ var render = function() {
                 [
                   _c(
                     "v-col",
-                    { attrs: { cols: "12" } },
+                    { staticClass: "categoriesSearch", attrs: { cols: "12" } },
                     [
+                      _vm.loading
+                        ? _c(
+                            "v-row",
+                            {
+                              staticClass: "grey lighten-5 loading",
+                              staticStyle: { height: "300px" },
+                              attrs: {
+                                align: _vm.alignment,
+                                justify: _vm.justify
+                              }
+                            },
+                            [_c("v-card", [_vm._v("Loading...")])],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.error
+                        ? _c(
+                            "v-row",
+                            {
+                              staticClass: "grey lighten-5 error",
+                              staticStyle: { height: "300px" },
+                              attrs: {
+                                align: _vm.alignment,
+                                justify: _vm.justify
+                              }
+                            },
+                            [_c("v-card", [_vm._v(_vm._s(_vm.error))])],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c(
                         "v-row",
                         {
@@ -38492,15 +38531,33 @@ var render = function() {
                           staticStyle: { height: "300px" },
                           attrs: { align: _vm.alignment, justify: _vm.justify }
                         },
-                        _vm._l(3, function(n) {
+                        _vm._l(_vm.categoriesSearch, function(categorySearch) {
                           return _c(
                             "v-card",
                             {
-                              key: n,
+                              key: categorySearch.id,
                               staticClass: "ma-3 pa-6",
                               attrs: { outlined: "", tile: "" }
                             },
-                            [_vm._v("\n            Column\n          ")]
+                            [
+                              _c("div", { staticClass: "title" }, [
+                                _vm._v(
+                                  "\n            " +
+                                    _vm._s(categorySearch.attributes.name) +
+                                    "\n          "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "subtitle-1" }, [
+                                _vm._v(
+                                  "\n            " +
+                                    _vm._s(
+                                      categorySearch.attributes.description
+                                    ) +
+                                    "\n          "
+                                )
+                              ])
+                            ]
                           )
                         }),
                         1
@@ -38510,40 +38567,7 @@ var render = function() {
                   )
                 ],
                 1
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "categoriesSearch" }, [
-                _vm.loading
-                  ? _c("div", { staticClass: "loading" }, [
-                      _vm._v("\n            Loading...\n        ")
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.error
-                  ? _c("div", { staticClass: "error" }, [
-                      _vm._v(
-                        "\n            " + _vm._s(_vm.error) + "\n        "
-                      )
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.categoriesSearch
-                  ? _c(
-                      "ul",
-                      _vm._l(_vm.categoriesSearch, function(categorySearch) {
-                        return _c("li", [
-                          _c("strong", [_vm._v("Name:")]),
-                          _vm._v(
-                            " " +
-                              _vm._s(categorySearch.results) +
-                              ",\n            "
-                          )
-                        ])
-                      }),
-                      0
-                    )
-                  : _vm._e()
-              ])
+              )
             ],
             1
           )
