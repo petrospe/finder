@@ -3,6 +3,7 @@
     <v-navigation-drawer
       v-model="drawer"
       app
+      v-if="jwt"
     >
       <v-list dense>
         <v-list-item link>
@@ -25,7 +26,7 @@
     </v-navigation-drawer>
 
     <v-app-bar app color="blue-grey darken-1">
-        <v-app-bar-nav-icon class="white--text" @click.stop="drawer = !drawer" />
+        <v-app-bar-nav-icon v-if="jwt" class="white--text" @click.stop="drawer = !drawer" />
         <router-link :to="{ name: 'Index' }">
           <v-img src="/images/icons/logo.png" max-width="130px"></v-img>
         </router-link>
@@ -62,9 +63,10 @@
       },
       methods: {
           fetchData() {
-            let jwt = localStorage.getItem('token');
-            if(jwt){
-              window.axios.defaults.headers.common['Authorization'] = `bearer ${jwt}`;
+            this.jwt = localStorage.getItem('token');
+            if(this.jwt){
+              window.axios.defaults.headers.common['Authorization'] = `bearer ${this.jwt}`;
+              // debugger;
             } else {
               console.error('JWT token not found')
             }
