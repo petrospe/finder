@@ -6,6 +6,7 @@ import Index from './views/Index.vue'
 import Login from './views/Login.vue'
 import Home from './views/Home.vue'
 import CategoriesSearch from './views/CategoriesSearch'
+import ItemsSearch from './views/ItemsSearch'
 
 Vue.use(VueRouter)
 
@@ -32,6 +33,11 @@ const router = new VueRouter({
         path:'/categories/search',
         name:'categories.search',
         component:CategoriesSearch
+      },
+      {
+        path:'/item/{categoryid}/search',
+        name:'items.search',
+        component:ItemsSearch
       }
     ]
 })

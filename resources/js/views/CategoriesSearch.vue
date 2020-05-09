@@ -20,7 +20,12 @@
           style="height: 300px;"
           v-if="error"
         >
-          <v-card>{{ error }}</v-card>
+          <v-card>
+            {{ error }}
+            <button @click.prevent="fetchData">
+              Try Again
+            </button>
+          </v-card>
         </v-row>
         <v-row
           :align="alignment"
@@ -72,14 +77,16 @@ export default {
             axios
                 .get('/api/categories/search')
                 .then(response => {
+                  this.loading = false;
                   this.categoriesSearch = JSON.parse(JSON.stringify(response.data)).data.results;
                   console.log(this.categoriesSearch);
                   // debugger;
                 })
-                .catch(response => {
-                  console.log(response.data.error)
+                .catch(error => {
+                  this.loading = false;
+                  this.error = error.response.data.message || error.message;
                 })
-                .finally(() => this.loading = false)
+                // .finally(() => this.loading = false)
         }
     }
 }

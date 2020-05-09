@@ -2072,6 +2072,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2094,13 +2099,13 @@ __webpack_require__.r(__webpack_exports__);
       this.error = this.categoriesSearch = null;
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/categories/search').then(function (response) {
+        _this.loading = false;
         _this.categoriesSearch = JSON.parse(JSON.stringify(response.data)).data.results;
         console.log(_this.categoriesSearch); // debugger;
-      })["catch"](function (response) {
-        console.log(response.data.error);
-      })["finally"](function () {
-        return _this.loading = false;
-      });
+      })["catch"](function (error) {
+        _this.loading = false;
+        _this.error = error.response.data.message || error.message;
+      }); // .finally(() => this.loading = false)
     }
   }
 });
@@ -38519,7 +38524,31 @@ var render = function() {
                                 justify: _vm.justify
                               }
                             },
-                            [_c("v-card", [_vm._v(_vm._s(_vm.error))])],
+                            [
+                              _c("v-card", [
+                                _vm._v(
+                                  "\n            " +
+                                    _vm._s(_vm.error) +
+                                    "\n            "
+                                ),
+                                _c(
+                                  "button",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.fetchData($event)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n              Try Again\n            "
+                                    )
+                                  ]
+                                )
+                              ])
+                            ],
                             1
                           )
                         : _vm._e(),
@@ -95975,7 +96004,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_Login_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/Login.vue */ "./resources/js/views/Login.vue");
 /* harmony import */ var _views_Home_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/Home.vue */ "./resources/js/views/Home.vue");
 /* harmony import */ var _views_CategoriesSearch__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/CategoriesSearch */ "./resources/js/views/CategoriesSearch.vue");
+/* harmony import */ var _views_ItemsSearch__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/ItemsSearch */ "./resources/js/views/ItemsSearch.vue");
  //Import View Router
+
 
 
 
@@ -96002,6 +96033,10 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     path: '/categories/search',
     name: 'categories.search',
     component: _views_CategoriesSearch__WEBPACK_IMPORTED_MODULE_5__["default"]
+  }, {
+    path: '/item/{categoryid}/search',
+    name: 'items.search',
+    component: _views_ItemsSearch__WEBPACK_IMPORTED_MODULE_6__["default"]
   }]
 });
 /* harmony default export */ __webpack_exports__["default"] = (router);
@@ -96281,6 +96316,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_494d9643___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/views/ItemsSearch.vue":
+/*!********************************************!*\
+  !*** ./resources/js/views/ItemsSearch.vue ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+var render, staticRenderFns
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_0__["default"])(
+  script,
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+component.options.__file = "resources/js/views/ItemsSearch.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
