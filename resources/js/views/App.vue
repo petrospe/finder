@@ -49,18 +49,26 @@
   </v-app>
 </template>
 <script>
-  let jwt = localStorage.getItem('jwt');
-  if(jwt){
-    window.axios.defaults.headers.common['Authorization'] = `bearer ${jwt}`;
-  } else {
-    console.error('JWT token not found')
-  }
     export default {
       data(){
         return {
             drawer: null,
             currentDate: new Date,
+            jwt: null,
         }
+      },
+      created() {
+          this.fetchData();
+      },
+      methods: {
+          fetchData() {
+            let jwt = localStorage.getItem('token');
+            if(jwt){
+              window.axios.defaults.headers.common['Authorization'] = `bearer ${jwt}`;
+            } else {
+              console.error('JWT token not found')
+            }
+          }
       }
     }
 </script>

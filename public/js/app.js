@@ -1991,20 +1991,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var jwt = localStorage.getItem('jwt');
-
-if (jwt) {
-  window.axios.defaults.headers.common['Authorization'] = "bearer ".concat(jwt);
-} else {
-  console.error('JWT token not found');
-}
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       drawer: null,
-      currentDate: new Date()
+      currentDate: new Date(),
+      jwt: null
     };
+  },
+  created: function created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData: function fetchData() {
+      var jwt = localStorage.getItem('token');
+
+      if (jwt) {
+        window.axios.defaults.headers.common['Authorization'] = "bearer ".concat(jwt);
+      } else {
+        console.error('JWT token not found');
+      }
+    }
   }
 });
 
