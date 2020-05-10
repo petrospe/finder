@@ -31,12 +31,11 @@
           :align="alignment"
           :justify="justify"
           class="grey lighten-5"
-          style="height: 300px;"
         >
           <v-card
             v-for="itemSearch in itemsSearch"
             :key="itemSearch.id"
-            class="ma-3 pa-6"
+            class="col-6"
             outlined
             tile
           >

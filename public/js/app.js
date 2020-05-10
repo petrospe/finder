@@ -2318,7 +2318,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -39119,7 +39118,6 @@ var render = function() {
                         "v-row",
                         {
                           staticClass: "grey lighten-5",
-                          staticStyle: { height: "300px" },
                           attrs: { align: _vm.alignment, justify: _vm.justify }
                         },
                         _vm._l(_vm.itemsSearch, function(itemSearch) {
@@ -39127,7 +39125,7 @@ var render = function() {
                             "v-card",
                             {
                               key: itemSearch.id,
-                              staticClass: "ma-3 pa-6",
+                              staticClass: "col-6",
                               attrs: { outlined: "", tile: "" }
                             },
                             [
