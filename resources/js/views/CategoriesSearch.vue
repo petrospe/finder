@@ -41,7 +41,7 @@
             tile
           >
           <div class="title">
-            {{ categorySearch.attributes.name}}
+            <router-link :to="{ name: 'items.search', params: { categoryid: categorySearch.id }}">{{ categorySearch.attributes.name}}</router-link>
           </div>
           <div class="subtitle-1">
             {{ categorySearch.attributes.description}}
