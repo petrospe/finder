@@ -170,11 +170,6 @@ class EntityController extends Controller
             if(!empty($child->row_value)){
               $attribute = Attribute::findOrFail($child->attribute_id);
               $requestedName = $attribute->name;
-              if(!empty($request) && $request->$requestedName){
-                if($request->$requestedName!=$category->row_value){
-                  $show = array('show'=>0);
-                }
-              }
               $attributeName[] = $attribute->name;
               $attributeRawValue[] = $child->row_value;
               $combinedAttributes = array_combine($attributeName,$attributeRawValue);
