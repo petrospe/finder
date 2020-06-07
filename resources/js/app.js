@@ -20,8 +20,7 @@ import vuetify from './plugins/vuetify'
 
 //Route information for Vue Router
 import Route from './routes.js'
-
-import App from './views/App'
+import App from './App.vue'
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 

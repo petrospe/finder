@@ -2,11 +2,11 @@ import Vue from 'vue'
 //Import View Router
 import VueRouter from 'vue-router'
 
-import Index from './views/Index.vue'
-import Login from './views/Login.vue'
-import Home from './views/Home.vue'
-import CategoriesSearch from './views/CategoriesSearch'
-import ItemsSearch from './views/ItemsSearch'
+import Index from './components/Index.vue'
+import Login from './components/Login.vue'
+import Home from './components/Home.vue'
+import CategoriesSearch from './components/CategoriesSearch'
+import ItemsSearch from './components/ItemsSearch'
 
 Vue.use(VueRouter)
 
