@@ -7,7 +7,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-
+import VueAuth from '@websanova/vue-auth'
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -17,7 +17,7 @@ window.Vue = require('vue');
  */
 
 import vuetify from './plugins/vuetify'
-import VueAuth from '@websanova/vue-auth'
+
 //Route information for Vue Router
 import Route from './routes.js'
 import App from './components/App.vue'
@@ -26,6 +26,10 @@ import App from './components/App.vue'
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
+// Set Vue authentication
+Vue.use(VueAxios, axios)
+axios.defaults.baseURL = `${process.env.MIX_APP_URL}/api`
+Vue.use(VueAuth, auth)
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -35,7 +39,6 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
     vuetify,
-    VueAuth,
     router: Route,
     render: h => h(App),
 });
