@@ -17,10 +17,10 @@ window.Vue = require('vue');
  */
 
 import vuetify from './plugins/vuetify'
-
+import VueAuth from '@websanova/vue-auth'
 //Route information for Vue Router
 import Route from './routes.js'
-import App from './App.vue'
+import App from './components/App.vue'
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
@@ -35,6 +35,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
     vuetify,
+    VueAuth,
     router: Route,
     render: h => h(App),
 });

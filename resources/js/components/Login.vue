@@ -10,21 +10,29 @@
                 <v-spacer />
               </v-toolbar>
               <v-card-text>
-                <v-form>
+                <div class="alert alert-danger" v-if="has_error">
+                    <p>Error, unable to connect with these identifiers.</p>
+                </div>
+                <v-form autocomplete="off" @submit.prevent="login" method="post">
                   <v-text-field
+                    v-model="email"
+                    id="email"
                     label="Login"
-                    name="login"
+                    name="email"
                     prepend-icon="person"
-                    type="text"
+                    type="email"
                   />
 
                   <v-text-field
+                    v-model="password"
                     id="password"
                     label="Password"
                     name="password"
                     prepend-icon="lock"
                     type="password"
                   />
+
+                  <v-btn type="submit" color="primary">Login</v-btn>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -37,7 +45,7 @@
                   <v-icon>mdi-facebook</v-icon>
                   Login
                 </v-btn>
-                <v-btn color="primary">Login</v-btn>
+
               </v-card-actions>
             </v-card>
           </v-col>
@@ -49,8 +57,38 @@
 
 <script>
   export default {
-    props: {
-      source: String,
+    data() {
+      return {
+        email: null,
+        password: null,
+        has_error: false
+      }
     },
+    mounted() {
+       //
+    },
+    methods: {
+      login() {
+        // get the redirect object
+        var redirect = this.$auth.redirect()
+        var app = this
+        this.$auth.login({
+          params: {
+            email: app.email,
+            password: app.password
+          },
+          success: function() {
+            // handle redirection
+            const redirectTo = redirect ? redirect.from.name : this.$auth.user().role === 'admin' ? 'admin' : 'home'
+            this.$router.push({name: redirectTo})
+          },
+          error: function() {
+            app.has_error = true
+          },
+          rememberMe: true,
+          fetchUser: true
+        })
+      }
+    }
   }
 </script>
