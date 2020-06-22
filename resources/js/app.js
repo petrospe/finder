@@ -7,7 +7,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-import VueAuth from '@websanova/vue-auth'
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -26,10 +26,6 @@ import App from './components/App.vue'
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
-// Set Vue authentication
-Vue.use(VueAxios, axios)
-axios.defaults.baseURL = `${process.env.MIX_APP_URL}/api`
-Vue.use(VueAuth, auth)
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
