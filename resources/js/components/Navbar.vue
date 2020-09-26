@@ -1,61 +1,73 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #546e7a;max-height:65px;">
-    <div class="container-fluid">
-      <router-link :to="{ name: user ? 'home' : 'welcome' }" class="navbar-brand">
-        <v-img src="/images/logo.png" width="130px" title="appName"></v-img>
+  <v-app-bar app color="blue-grey darken-1">
+
+      <router-link :to="{ name: user ? 'home' : 'welcome' }">
+        <v-img src="/images/logo.png" width="130px" alt="{appName}" />
       </router-link>
+
+      <v-spacer></v-spacer>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false">
         <span class="navbar-toggler-icon" />
       </button>
 
-      <div id="navbarToggler" class="collapse navbar-collapse">
-        <ul class="navbar-nav">
-          <locale-dropdown />
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li> -->
-        </ul>
+      <ul class="navbar-nav text-white mr-8">
+        <locale-dropdown />
+      </ul>
 
-        <ul class="navbar-nav ml-auto">
-          <!-- Authenticated -->
-          <li v-if="user" class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-dark"
-               href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-            >
-              <img :src="user.photo_url" class="rounded-circle profile-photo mr-1">
-              {{ user.name }}
-            </a>
-            <div class="dropdown-menu">
-              <router-link :to="{ name: 'settings.profile' }" class="dropdown-item pl-3">
-                <fa icon="cog" fixed-width />
-                {{ $t('settings') }}
-              </router-link>
+      <!-- Authenticated -->
+      <v-menu
+         v-if="user"
+         left
+         bottom
+       >
+         <template v-slot:activator="{ on, attrs }">
+           <v-btn
+             icon
+             v-bind="attrs"
+             v-on="on"
+             class="white--text links mr-4"
+           >
+             <img :src="user.photo_url" class="rounded-circle profile-photo mr-1">
+             {{ user.name }}
+           </v-btn>
+         </template>
 
-              <div class="dropdown-divider" />
-              <a href="#" class="dropdown-item pl-3" @click.prevent="logout">
-                <fa icon="sign-out-alt" fixed-width />
-                {{ $t('logout') }}
-              </a>
-            </div>
-          </li>
-          <!-- Guest -->
-          <template v-else>
-            <li class="nav-item">
-              <router-link :to="{ name: 'login' }" class="nav-link" active-class="active">
-                {{ $t('login') }}
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link :to="{ name: 'register' }" class="nav-link" active-class="active">
-                {{ $t('register') }}
-              </router-link>
-            </li>
-          </template>
-        </ul>
-      </div>
-    </div>
-  </nav>
+         <v-list>
+           <v-list-item>
+             <router-link :to="{ name: 'settings.profile' }" class="dropdown-item">
+               <v-list-item-title>
+               <fa icon="cog" fixed-width />
+               {{ $t('settings') }}
+               </v-list-item-title>
+             </router-link>
+             <v-list-item-title>
+               <a href="#" class="dropdown-item" @click.prevent="logout">
+                 <fa icon="sign-out-alt" fixed-width />
+                 {{ $t('logout') }}
+               </a>
+             </v-list-item-title>
+           </v-list-item>
+         </v-list>
+       </v-menu>
+
+        <!-- Guest -->
+        <template v-else>
+          <router-link :to="{ name: 'login' }">
+            <v-btn right class="white--text links mr-16" icon>
+             <v-icon class="white--text">mdi-login-variant</v-icon>
+            {{ $t('login') }}
+          </v-btn>
+          </router-link>
+          <router-link :to="{ name: 'register' }">
+            <v-btn right class="white--text links mr-7" icon>
+             <v-icon class="white--text" >mdi-draw</v-icon>
+            {{ $t('register') }}
+          </v-btn>
+          </router-link>
+        </template>
+
+  </v-app-bar>
 </template>
 
 <script>

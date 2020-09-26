@@ -6,7 +6,7 @@
           <v-tooltip left>
             <template v-slot:activator="{ on }">
               <v-btn
-                :to="{ name: 'categories.search' }"
+                :to="{ name: 'categories' }"
                 icon
                 large
                 v-on="on"
@@ -20,7 +20,7 @@
           <v-tooltip right>
             <template v-slot:activator="{ on }">
               <v-btn
-                :to="{ name: 'Home' }"
+                :to="{ name: 'home' }"
                 icon
                 large
                 v-on="on"

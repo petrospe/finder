@@ -1,11 +1,15 @@
 <template>
   <div class="main-layout">
     <navbar />
-
-    <div class="container mt-4">
-      <child />
-    </div>
-
+    <v-main>
+      <v-container fill-height>
+        <v-row justify="center" align="center">
+          <v-col cols="12">
+            <child />
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
     <component :is="footer" v-if="footer" />
   </div>
 </template>
