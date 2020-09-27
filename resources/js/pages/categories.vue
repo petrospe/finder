@@ -51,6 +51,9 @@
 <script>
 import axios from 'axios'
 export default {
+    metaInfo () {
+      return { title: this.$t('categories') }
+    },
     data() {
         return {
             alignment: 'center',

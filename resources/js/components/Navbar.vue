@@ -15,6 +15,13 @@
         <locale-dropdown />
       </ul>
 
+      <router-link :to="{ name: 'categories' }">
+        <v-btn large right class="white--text links mr-14" icon>
+           <v-icon large class="white--text">mdi-magnify</v-icon>
+          {{ $t('search') }}
+        </v-btn>
+      </router-link>
+
       <!-- Authenticated -->
       <v-menu
          v-if="user"

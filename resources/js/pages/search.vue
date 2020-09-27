@@ -38,7 +38,7 @@
       >
       <v-card-title class="grey--text text--darken-4">Search Criteria</v-card-title>
 
-          <form>
+          <v-form>
           <div v-for="(attribute,i) in itemSearch.attributes">
             <!-- {{ attributes }} -->
               <v-text-field
@@ -49,7 +49,7 @@
           </div>
           <v-btn class="mr-4" @click="submit">submit</v-btn>
           <v-btn @click="clear">clear</v-btn>
-          </form>
+        </v-form>
 
       </v-card>
     </v-row>
@@ -60,6 +60,9 @@
 import axios from 'axios'
 
 export default {
+    metaInfo () {
+      return { title: this.$t('items_search') }
+    },
     data() {
         return {
             alignment: 'center',
