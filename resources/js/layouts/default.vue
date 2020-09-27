@@ -31,3 +31,8 @@ export default {
   })
 }
 </script>
+<style lang="scss">
+main {
+  min-height: 80vh;
+}
+</style>

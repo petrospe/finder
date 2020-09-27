@@ -56,8 +56,8 @@ Route::group(['middleware' => 'guest:api'], function () {
 
     Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
-
-    Route::get('categories/search', 'EntityController@getActiveCategories');
-    Route::get('items/{categoryid}/search', 'EntityController@getActiveItems');
-    Route::get('{entity}/{id}', 'EntityController@getActiveEntity');
 });
+
+Route::get('categories/search', 'EntityController@getActiveCategories');
+Route::get('items/{categoryid}/search', 'EntityController@getActiveItems');
+Route::get('{entity}/{id}', 'EntityController@getActiveEntity');

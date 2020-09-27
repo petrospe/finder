@@ -83,7 +83,7 @@ export default {
                   this.loading = false;
                   this.error = error.response.data.message || error.message;
                 })
-                // .finally(() => this.loading = false)
+                .finally(() => this.loading = false)
         }
     }
 }
