@@ -3,9 +3,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Index from './components/Index.vue'
-import Login from './components/Login.vue'
 import Home from './components/Home.vue'
-import Admin from './components/Admin.vue'
 import CategoriesSearch from './components/CategoriesSearch'
 import ItemsSearch from './components/ItemsSearch'
 
@@ -24,27 +22,11 @@ const router = new VueRouter({
           }
       },
       {
-          path:'/login',
-          name:'Login',
-          component:Login,
-          meta: {
-            auth: false
-          }
-      },
-      {
           path:'/home',
           name:'Home',
           component:Home,
           meta: {
             auth: true
-          }
-      },
-      {
-          path: '/admin',
-          name: 'Admin',
-          component: Admin,
-          meta: {
-            auth: {roles: 'admin', redirect: {name: 'login'}, forbiddenRedirect: '/403'}
           }
       },
       {

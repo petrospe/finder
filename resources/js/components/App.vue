@@ -31,10 +31,10 @@
           <v-img src="/images/icons/logo.png" max-width="130px"></v-img>
         </router-link>
        <v-spacer></v-spacer>
-       <router-link :to="{ name: 'Login' }">
-         <v-btn class="white--text" icon>
-           <v-icon>mdi-login-variant</v-icon>
-           <span>Login</span>
+       <router-link :to="{ name: 'categories.search' }">
+         <v-btn class="white--text m-2" icon>
+           <v-icon>mdi-magnify</v-icon>
+           <span>Search</span>
        </v-btn>
        </router-link>
     </v-app-bar>
