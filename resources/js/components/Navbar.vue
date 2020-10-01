@@ -2,7 +2,7 @@
   <v-app-bar app color="blue-grey darken-1">
 
       <router-link :to="{ name: user ? 'home' : 'welcome' }">
-        <v-img src="/images/logo.png" width="130px" alt="{appName}" />
+        <v-img src="/images/logo.png" width="130px" v-bind:alt="appName" />
       </router-link>
 
       <v-spacer></v-spacer>

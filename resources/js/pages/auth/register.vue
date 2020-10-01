@@ -9,41 +9,49 @@
       <card v-else :title="$t('register')">
         <form @submit.prevent="register" @keydown="form.onKeydown($event)">
           <!-- Name -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('name') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" class="form-control" type="text" name="name">
-              <has-error :form="form" field="name" />
-            </div>
-          </div>
+          <v-text-field
+            v-model="form.name"
+            id="name"
+            v-bind:label="$t('name')"
+            name="name"
+            type="text"
+            :class="{ 'is-invalid': form.errors.has('name') }"
+          />
+          <has-error :form="form" field="name" />
 
           <!-- Email -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="email" name="email">
-              <has-error :form="form" field="email" />
-            </div>
-          </div>
+          <v-text-field
+            v-model="form.email"
+            id="email"
+            v-bind:label="$t('email')"
+            name="email"
+            type="email"
+            :class="{ 'is-invalid': form.errors.has('email') }"
+          />
+          <has-error :form="form" field="email" />
 
           <!-- Password -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('password') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" class="form-control" type="password" name="password">
-              <has-error :form="form" field="password" />
-            </div>
-          </div>
+          <v-text-field
+            v-model="form.password"
+            id="password"
+            v-bind:label="$t('password')"
+            name="password"
+            type="password"
+            :class="{ 'is-invalid': form.errors.has('password') }"
+          />
+          <has-error :form="form" field="password" />
 
           <!-- Password Confirmation -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('confirm_password') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" class="form-control" type="password" name="password_confirmation">
-              <has-error :form="form" field="password_confirmation" />
-            </div>
-          </div>
-
+          <v-text-field
+            v-model="form.password_confirmation"
+            id="password_confirmation"
+            v-bind:label="$t('confirm_password')"
+            name="password_confirmation"
+            type="password"
+            :class="{ 'is-invalid': form.errors.has('password_confirmation') }"
+          />
+          <has-error :form="form" field="password_confirmation" />
+          
           <div class="form-group row">
             <div class="col-md-7 offset-md-3 d-flex">
               <!-- Submit Button -->
@@ -67,7 +75,7 @@ import LoginWithGithub from '~/components/LoginWithGithub'
 
 export default {
   layout: 'basic',
-  
+
   middleware: 'guest',
 
   components: {

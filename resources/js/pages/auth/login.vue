@@ -2,22 +2,28 @@
       <card :title="$t('login')">
         <v-form @submit.prevent="login" @keydown="form.onKeydown($event)">
           <!-- Email -->
-          <div class="form-group row">
-            <label class="col-md-4 col-form-label text-md-right">{{ $t('email') }}</label>
-            <div class="col-md-8">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="email" name="email">
-              <has-error :form="form" field="email" />
-            </div>
-          </div>
+          <v-text-field
+            v-model="form.email"
+            id="email"
+            v-bind:label="$t('email')"
+            name="email"
+            prepend-icon="person"
+            type="email"
+            :class="{ 'is-invalid': form.errors.has('email') }"
+          />
+          <has-error :form="form" field="email" />
 
           <!-- Password -->
-          <div class="form-group row">
-            <label class="col-md-4 col-form-label text-md-right">{{ $t('password') }}</label>
-            <div class="col-md-8">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" class="form-control" type="password" name="password">
-              <has-error :form="form" field="password" />
-            </div>
-          </div>
+          <v-text-field
+            v-model="form.password"
+            id="password"
+            v-bind:label="$t('password')"
+            name="password"
+            prepend-icon="lock"
+            type="password"
+            :class="{ 'is-invalid': form.errors.has('password') }"
+          />
+          <has-error :form="form" field="password" />
 
           <!-- Remember Me -->
           <div class="form-group row">
