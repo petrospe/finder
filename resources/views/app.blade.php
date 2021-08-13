@@ -18,7 +18,9 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
     <body>
-      <div id="app"></div>
+      <div style="position:absolute;top:50%;left:50%;margin-top:-50px;background:rgb(84, 110, 122);padding:5px;border-radius:10px;width:50%;">
+        <img src="{{ asset('images/icons/logo.png') }}" alt="{{ config('app.name', 'Laravel') }}" >
+      </div>
       <!-- Scripts -->
       <script src="{{ asset('js/app.js') }}" defer></script>
     </body>
