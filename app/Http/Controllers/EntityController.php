@@ -157,10 +157,14 @@ class EntityController extends Controller
 
     public function getActiveEntity($entity,$entityId){
       $itemAttribute = Attribute::where('name',$entity)->first();
+      if(!$itemAttribute){
+        return response()->json(['message' => 'Not Found!'], 404);
+      }
       $status = Status::where('name','Active')->first();
-      // $itemEntity = Entity::where('attribute_id',$itemAttribute->id)->where('status_id',$status->id)->where('id',$entityId)->first();
-      $itemEntity = Entity::findOrFail($entityId);
-      if($itemEntity){
+
+      $itemEntity = Entity::where('id',$entityId)->where('status_id',$status->id)->first();
+
+      if($itemEntity && ($itemAttribute->id==$itemEntity->attribute_id)){
         $childInstances = array();
         $children = Entity::where('parent_id',$itemEntity->id)->orderBy('display_order')->get();
         $attributeName = array();
@@ -176,7 +180,11 @@ class EntityController extends Controller
               $childInstances[$itemEntity->id] = array_merge($show,$combinedAttributes);
             }
         }
-        $itemInstancesArr = array('id'=> $itemEntity->id ,'attributes'=> $childInstances[$itemEntity->id]);
+        $itemInstancesArr = array('row_value' => $itemEntity->row_value);
+        if(sizeOf($childInstances)){
+          $itemInstancesArr = array('id'=> $itemEntity->id ,'attributes'=> $childInstances[$itemEntity->id]);
+        }
+
         return $itemInstancesArr;
       } else {
         return response()->json(['message' => 'Not Found!'], 404);
