@@ -158,7 +158,7 @@ class EntityController extends Controller
     public function getActiveEntity($entity,$entityId){
       $itemAttribute = Attribute::where('name',$entity)->first();
       if(!$itemAttribute){
-        return response()->json(['message' => 'Not Found!'], 404);
+        return response()->json(['message' => 'Invalid Attribute'], 404);
       }
       $status = Status::where('name','Active')->first();
 
@@ -187,7 +187,7 @@ class EntityController extends Controller
 
         return $itemInstancesArr;
       } else {
-        return response()->json(['message' => 'Not Found!'], 404);
+        return response()->json(['message' => 'Invalid Entity'], 404);
       }
     }
 

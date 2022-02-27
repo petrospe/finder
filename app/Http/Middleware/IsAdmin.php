@@ -19,7 +19,8 @@ class IsAdmin
          return $next($request);
        } else {
          // return response()->json('Unauthorized', 401);
-         return abort(403, 'Forbidden');
+         return response()->json('Forbidden', 403);
+         // return abort(403, 'Forbidden');
        }
     }
 }
