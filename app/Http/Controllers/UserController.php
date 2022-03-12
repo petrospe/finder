@@ -83,10 +83,15 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-      $user = User::findOrFail($id);
-      $user->update($request->all());
+      $connectedUser = Auth::user();
+      if($this->isAdmin || ($connectedUser && ($connectedUser->id==$id))){
+        $user = User::findOrFail($id);
+        $user->update($request->all());
 
-      return new UserResource($user);
+        return new UserResource($user);
+      } else {
+        return response()->json(['message' => 'Insufficient rights'], 403);
+      }
     }
 
     /**
@@ -99,7 +104,8 @@ class UserController extends Controller
     {
       if($this->isAdmin){
         User::destroy($id);
-        return response()->json(null, 204);
+        return response()->json(['message' => null], 204);
+        // return response()->json(null, 204);
       } else{
         return response()->json(['message' => 'Insufficient rights'], 403);
         // return abort(403, 'Forbidden');
