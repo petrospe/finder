@@ -19,9 +19,6 @@ use Illuminate\Http\Request;
 Route::post('auth/login', 'ApiController@login');
 Route::post('auth/register', 'ApiController@register');
 
-Route::get('auth/{provider}', 'ApiController@redirectToProvider');
-Route::get('auth/{provider}/callback', 'ApiController@handleProviderCallback');
-
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('auth/logout', 'ApiController@logout');
 
@@ -51,3 +48,6 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 Route::get('categories/search', 'EntityController@getActiveCategories');
 Route::get('items/{categoryid}/search', 'EntityController@getActiveItems');
 Route::get('{entity}/{id}', 'EntityController@getActiveEntity');
+
+Route::get('auth/{provider}', 'ApiController@redirectToProvider');
+Route::get('auth/{provider}/callback', 'ApiController@handleProviderCallback');

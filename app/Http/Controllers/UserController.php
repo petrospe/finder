@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Auth;
 use App\Http\Resources\UserResource;
 
 class UserController extends Controller
@@ -29,7 +30,8 @@ class UserController extends Controller
       if($this->isAdmin){
         return UserResource::collection(User::all());
       } else{
-        return abort(403, 'Forbidden');
+        return response()->json(['message' => 'Insufficient rights'], 403);
+        // return abort(403, 'Forbidden');
       }
     }
 
@@ -50,7 +52,8 @@ class UserController extends Controller
 
         return new UserResource($user);
       } else{
-        return abort(403, 'Forbidden');
+        return response()->json(['message' => 'Insufficient rights'], 403);
+        // return abort(403, 'Forbidden');
       }
     }
 
@@ -62,8 +65,13 @@ class UserController extends Controller
      */
     public function show($id)
     {
-      $user = User::findOrFail($id);
-      return new UserResource($user);
+      $connectedUser = Auth::user();
+      if($this->isAdmin || ($connectedUser && ($connectedUser->id==$id))){
+        $user = User::findOrFail($id);
+        return new UserResource($user);
+      } else {
+        return response()->json(['message' => 'Insufficient rights'], 403);
+      }
     }
 
     /**
@@ -93,7 +101,8 @@ class UserController extends Controller
         User::destroy($id);
         return response()->json(null, 204);
       } else{
-        return abort(403, 'Forbidden');
+        return response()->json(['message' => 'Insufficient rights'], 403);
+        // return abort(403, 'Forbidden');
       }
     }
 }
