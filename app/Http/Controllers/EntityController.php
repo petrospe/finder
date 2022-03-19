@@ -22,9 +22,18 @@ class EntityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, $page=1, $per_page=10)
     {
-        return EntityResource::collection(Entity::all());
+        if(isset($request->page)){
+          $page = $request->page;
+        }
+        if(isset($request->page)){
+          $per_page = $request->per_page;
+        }
+
+        $data = EntityResource::collection(Entity::paginate($per_page));
+
+        return $this->outputMetaResults($data,$page,$per_page,$data->total());
     }
 
     /**
@@ -35,6 +44,13 @@ class EntityController extends Controller
      */
     public function store(Request $request)
     {
+      $validated = $request->validate([
+          'attribute_id' => 'required|exists:attributes,id',
+          'parent_id' => 'nullable|exists:entities,id',
+          'row_value' => 'required',
+          'status_id' => 'required',
+      ]);
+
       $entity = Entity::create([
         'attribute_id' => $request->attribute_id,
         'parent_id' => $request->parent_id,
@@ -66,6 +82,13 @@ class EntityController extends Controller
      */
     public function update(Request $request, $id)
     {
+      $validated = $request->validate([
+          'attribute_id' => 'required|exists:attributes,id',
+          'parent_id' => 'nullable|exists:entities,id',
+          'row_value' => 'required',
+          'status_id' => 'required',
+      ]);
+
       $entity = Entity::findOrFail($id);
       $entity->update($request->all());
 
@@ -84,7 +107,7 @@ class EntityController extends Controller
       return response()->json(null, 204);
     }
 
-    public function getEntityAttribute(Request $request=null, $attributeName, $statusName, $parentEntityId=null, $page=1, $per_page=10)
+    private function getEntityAttribute(Request $request=null, $attributeName, $statusName, $parentEntityId=null, $page=1, $per_page=10)
     {
       $categoryAttribute = Attribute::where('name',$attributeName)->first();
       $status = Status::where('name',$statusName)->first();
@@ -128,21 +151,14 @@ class EntityController extends Controller
         }
       }
 // dd($categoryInstances);
-    $output = [
-        'results' => [],
-        'meta'    => [],
-    ];
+      if(isset($request->page)){
+        $page = $request->page;
+      }
+      if(isset($request->page)){
+        $per_page = $request->per_page;
+      }
 
-    // Get Results
-    $output['results'] = $categoryInstancesArr;
-
-    // Set Meta
-    $output['meta'] = [
-        'page'        => $page,
-        'per_page'    => $per_page,
-        'count'       => count($categoryInstancesArr),
-        'total_pages' => ceil(count($categoryInstancesArr) / $per_page)
-    ];
+      $output = $this->outputMetaResults($categoryInstancesArr,$page,$per_page,count($categoryInstancesArr));
 
       return new EntityResource($output);
     }
@@ -285,5 +301,25 @@ class EntityController extends Controller
         return response()->json([
             'success' => false
         ], 500);
+    }
+
+    private function outputMetaResults($data,$page,$per_page,$total){
+      $output = [
+          'results' => [],
+          'meta'    => [],
+      ];
+
+      // Get Results
+      $output['results'] = (!empty($data)?$data:[]);
+
+      // Set Meta
+      $output['meta'] = [
+          'page'        => $page,
+          'per_page'    => $per_page,
+          'count'       => (!empty($total)?$total:count($data)),
+          'total_pages' => ceil((!empty($total)?$total:count($data)) / $per_page)
+      ];
+
+      return $output;
     }
 }
