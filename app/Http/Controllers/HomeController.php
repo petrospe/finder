@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Artisan;
 
 class HomeController extends Controller
 {
@@ -27,23 +28,32 @@ class HomeController extends Controller
     }
 
     public function clearCache() {
+      try{
         Artisan::call('cache:clear');
         Artisan::call('route:cache');
         Artisan::call('config:clear');
         Artisan::call('view:clear');
-        return redirect()->back();
+        return response()->json(['message' => 'Clear cache OK']);
+      } catch (\Exception $e) {
+        header("Content-Type: application/json");
+        print json_encode(['message' => 'Cannot run clear cache. '.$e->getMessage()]);
+        return false;
+      }
     }
 
     public function optimizeDatabase() {
         try{
             $alltables = \DB::select('SHOW TABLES');
             $tables_in_db_name = 'Tables_in_'.env('DB_DATABASE');
+            $tableArr = [];
             foreach($alltables as $table){
                 \DB::select("OPTIMIZE TABLE ".$table->$tables_in_db_name);
-                print $table->$tables_in_db_name." optimize OK<br>";
+                $tableArr[$table->$tables_in_db_name] = "Optimize OK";
             }
-        } catch (Exception $e) {
-           print "cannot optimize database. ".$e->getMessage();
+            return response()->json(['message' => $tableArr]);
+        } catch (\Exception $e) {
+           header("Content-Type: application/json");
+           print json_encode(['message' => 'Cannot optimize database. '.$e->getMessage()]);
            return false;
         }
     }

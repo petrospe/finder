@@ -29,6 +29,9 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
       Route::get('category/add', 'AttributeController@index');
       Route::post('category/store', 'EntityController@storeCategory');
+
+      Route::get('/clear-cache', 'HomeController@clearCache');
+      Route::get('/optimize-db', 'HomeController@optimizeDatabase');
     });
 
     Route::apiResource('auth/users', 'UserController');
