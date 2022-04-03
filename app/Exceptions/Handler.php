@@ -50,6 +50,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof \Illuminate\Foundation\Http\Exceptions\MaintenanceModeException) {
+            return response(!empty($exception->getMessage())?$exception->getMessage():"Service Unavailable", 503)
+                  ->header('Content-Type', 'text/plain');
+        }
+
         $request->headers->set('Accept', 'application/json');
 
         return parent::render($request, $exception);
