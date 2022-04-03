@@ -1,0 +1,1616 @@
+{
+    "openapi": "3.0.0",
+    "servers": [
+        {
+            "url": "https://finder.petros.xyz"
+        }
+    ],
+    "info": {
+        "description": "Create a profile and upload items detailed it with images and with its useful attributes. Specify each item category. Search by using item attribute category criteria. Login or register via Google or Facebook.",
+        "version": "1.0.0",
+        "title": "Finder",
+        "termsOfService": "https://github.com/petrospe/finder/blob/master/licence.md",
+        "contact": {
+            "email": "info@petros.xyz"
+        },
+        "x-logo":{
+          "url": "images/logo.png",
+          "altText": "Finder logo"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "tags": [
+        {
+            "name": "items",
+            "description": "Everything about your Items. Entity with item attribute"
+        },
+        {
+            "name": "categories",
+            "description": "Access to Category. Entity with category attribute"
+        },
+        {
+            "name": "entities",
+            "description": "Operations about entities.",
+            "externalDocs": {
+                "description": "Find out more about our entities",
+                "url": "https://spec.openapis.org/oas/latest.html"
+            }
+        },
+        {
+            "name": "attributes",
+            "description": "Operations about Attributes. Every entity has an attribute"
+        },
+        {
+            "name": "statuses",
+            "description": "Operations about entity status. Set the entity status"
+        },
+        {
+            "name": "auth/users",
+            "description": "Operations about users"
+        }
+    ],
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "auth/users"
+                ],
+                "summary": "Logs user into the system",
+                "description": "",
+                "operationId": "loginUser",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "enum": [
+                                                true,
+                                                false
+                                            ]
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "format": "JWT"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "4xx": {
+                        "description": "client errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "5xx": {
+                        "description": "server errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "description": "Set login parameters"
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": [
+                    "auth/users"
+                ],
+                "summary": "Logs out current logged in user session",
+                "description": "",
+                "operationId": "logoutUser",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "enum": [
+                                                true,
+                                                false
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logged out successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "4xx": {
+                        "description": "client errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "5xx": {
+                        "description": "server errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "token": {
+                                        "type": "string",
+                                        "format": "JWT"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "description": "Set token value"
+                }
+            }
+        },
+        "/items/{categoryId}/search": {
+            "get": {
+                "summary": "Get searched attributes items for category id",
+                "description": "Get the attributes which used by items of this category ",
+                "parameters": [
+                    {
+                        "name": "categoryId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "int32"
+                        },
+                        "description": "The Category Id"
+                    },
+                    {
+                        "name": "{attribute_name}",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "If set a value to an attribute name, then get paginated results, of these items with this attribute value. Ex ?title=Shakespeare."
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "int32",
+                            "default": "1"
+                        },
+                        "description": "Set the page number if not set page is 1",
+                        "minLength": "1"
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "int32",
+                            "default": "10"
+                        },
+                        "description": "Set the items number per page if not set the number of items is 10",
+                        "minLength": "1"
+                    }
+                ],
+                "operationId": "categoryId",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ItemsCategories"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "items"
+                ],
+                "security": []
+            }
+        },
+        "/categories/search": {
+            "get": {
+                "summary": "Get category list",
+                "description": "Full category list with attributes",
+                "parameters": [],
+                "operationId": "categoryList",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ItemsCategories"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "categories"
+                ],
+                "security": []
+            }
+        },
+        "/{entity}/{Id}": {
+            "get": {
+                "summary": "Get any entity",
+                "description": "Use attribute name in {entity} section with it's Id and get the entity with it's attributes with values",
+                "parameters": [
+                    {
+                        "name": "entity",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Any valid attribute name"
+                    },
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Any valid attribute Id."
+                    }
+                ],
+                "operationId": "entityId",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "row_value": {
+                                            "type": "string",
+                                            "format": "text"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "4xx": {
+                        "description": "client errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "5xx": {
+                        "description": "server errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "items",
+                    "categories",
+                    "entities"
+                ],
+                "security": []
+            }
+        },
+        "/auth/users": {
+            "get": {
+                "summary": "Get Subscribed users",
+                "description": "Show all subscribed users. Require admin user role.",
+                "parameters": [],
+                "operationId": "subscribedUsers",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "4xx": {
+                        "description": "client errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "5xx": {
+                        "description": "server errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "auth/users"
+                ]
+            },
+            "post": {
+                "summary": "Create new user",
+                "description": "Create new user/subscriber. Require admin rights",
+                "parameters": [],
+                "operationId": "newUser",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "format": "varchar(191)"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "bigint(20)"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "change/me": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "4xx": {
+                        "description": "client errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "5xx": {
+                        "description": "server errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "auth/users"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "format": "varchar(191)"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "description": "Create user object"
+                }
+            }
+        },
+        "/auth/users/{Id}": {
+            "get": {
+                "summary": "Show user details",
+                "description": "Show user/subscriber details. Show details only for connected user. Admin users show all.",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid user Id"
+                    }
+                ],
+                "operationId": "userDetails",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "4xx": {
+                        "description": "client errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "5xx": {
+                        "description": "server errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "auth/users"
+                ]
+            },
+            "put": {
+                "summary": "Change user details",
+                "description": "Change user/subscriber details. Change details only for connected user. Admin users can changes all.",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid user Id"
+                    }
+                ],
+                "operationId": "changeUserDetails",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "4xx": {
+                        "description": "client errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "5xx": {
+                        "description": "server errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "auth/users"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "format": "varchar(191)"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "provider": {
+                                        "type": "string",
+                                        "format": "varchar(191)"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "description": "Update user object"
+                }
+            },
+            "delete": {
+                "summary": "Delete user",
+                "description": "Delete user/subscriber. Require admin rights.",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid user Id"
+                    }
+                ],
+                "operationId": "deleteUser",
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "4xx": {
+                        "description": "client errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "5xx": {
+                        "description": "server errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "auth/users"
+                ]
+            }
+        },
+        "/entities": {
+            "get": {
+                "summary": "Get all entities",
+                "description": "Get all entities paginated. Require admin permissions.",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "1",
+                            "enum": []
+                        },
+                        "description": "Set the page number if not set page is 1",
+                        "minLength": "1"
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "10"
+                        },
+                        "description": "Set the items number per page if not set the number of items is 10",
+                        "minLength": "1"
+                    }
+                ],
+                "operationId": "allEntities",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Entities"
+                                }
+                            }
+                        }
+                    },
+                    "4xx": {
+                        "description": "client errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "5xx": {
+                        "description": "server errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "entities"
+                ]
+            },
+            "post": {
+                "summary": "Store new entity",
+                "description": "Store new entity. Require admin rights",
+                "parameters": [],
+                "operationId": "newEntity",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                },
+                "tags": [
+                    "entities"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "attribute_id": {
+                                        "type": "integer",
+                                        "format": "bigint(20)"
+                                    },
+                                    "parent_id": {
+                                        "type": "integer",
+                                        "format": "bigint(20)"
+                                    },
+                                    "display_order": {
+                                        "type": "integer",
+                                        "format": "bigint(20)"
+                                    },
+                                    "row_value": {
+                                        "type": "string",
+                                        "format": "text"
+                                    },
+                                    "status_id": {
+                                        "type": "integer",
+                                        "format": "bigint(20)"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "description": "Set Store new entity"
+                }
+            }
+        },
+        "/entities/{Id}": {
+            "get": {
+                "summary": "Show entity details",
+                "description": "Show entity details. Require admin rights",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid entity id"
+                    }
+                ],
+                "operationId": "entityDetails",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Entity"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "entities"
+                ]
+            },
+            "put": {
+                "summary": "Change entity details",
+                "description": "Change entity details. Require admin rights",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid entity id"
+                    }
+                ],
+                "operationId": "changeEntityDetails",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Entity"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "entities"
+                ]
+            },
+            "delete": {
+                "summary": "Delete entity",
+                "description": "Delete entity. Require admin rights.",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid entity id"
+                    }
+                ],
+                "operationId": "deleteEntity",
+                "responses": {
+                    "204": {
+                        "description": "No content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "entities"
+                ]
+            }
+        },
+        "/attributes": {
+            "get": {
+                "summary": "Get all attributes",
+                "description": "Get all attributes. Require admin permissions.",
+                "parameters": [
+                    {}
+                ],
+                "operationId": "allAttributes",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Attribute"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "4xx": {
+                        "description": "client errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "5xx": {
+                        "description": "server errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "attributes"
+                ]
+            },
+            "post": {
+                "summary": "Store new attribute",
+                "description": "Store new attribute. Require admin rights",
+                "parameters": [],
+                "operationId": "newAttribute",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                },
+                "tags": [
+                    "attributes"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "format": "varchar(191)"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "description": "Set Store new attribute"
+                }
+            }
+        },
+        "/attributes/{Id}": {
+            "get": {
+                "summary": "Show attribute details",
+                "description": "Show attribute details. Require admin rights",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid attributes id"
+                    }
+                ],
+                "operationId": "attributeDetails",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Attribute"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "attributes"
+                ]
+            },
+            "put": {
+                "summary": "Change attribute details",
+                "description": "Change attribute details. Require admin rights",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid attribute id"
+                    }
+                ],
+                "operationId": "changeAttributeDetails",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Attribute"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "attributes"
+                ]
+            },
+            "delete": {
+                "summary": "Delete attribute",
+                "description": "Delete attribute. Require admin rights.",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid attribute id"
+                    }
+                ],
+                "operationId": "deleteAttribute",
+                "responses": {
+                    "204": {
+                        "description": "No content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "attributes"
+                ]
+            }
+        },
+        "/statuses": {
+            "get": {
+                "summary": "Get all statuses",
+                "description": "Get all statuses. Require admin permissions.",
+                "parameters": [
+                    {}
+                ],
+                "operationId": "allStatuses",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Status"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "4xx": {
+                        "description": "client errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "5xx": {
+                        "description": "server errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "statuses"
+                ]
+            },
+            "post": {
+                "summary": "Store new status",
+                "description": "Store new status. Require admin rights",
+                "parameters": [],
+                "operationId": "newStatus",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                },
+                "tags": [
+                    "statuses"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "format": "varchar(191)"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "description": "Set Store new status"
+                }
+            }
+        },
+        "/statuses/{Id}": {
+            "get": {
+                "summary": "Show status details",
+                "description": "Show status details. Require admin rights",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid status id"
+                    }
+                ],
+                "operationId": "statusDetails",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Status"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "statuses"
+                ]
+            },
+            "put": {
+                "summary": "Change status details",
+                "description": "Change status details. Require admin rights",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid status id"
+                    }
+                ],
+                "operationId": "changeStatusDetails",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Status"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "statuses"
+                ]
+            },
+            "delete": {
+                "summary": "Delete status",
+                "description": "Delete status. Require admin rights.",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "A valid status id"
+                    }
+                ],
+                "operationId": "deleteStatus",
+                "responses": {
+                    "204": {
+                        "description": "No content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "statuses"
+                ]
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "See AsyncAPI example",
+        "url": "https://github.com/petrospe/finder"
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "format": "bigint(20)"
+                            },
+                            "name": {
+                                "type": "string",
+                                "format": "varchar(191)"
+                            },
+                            "email": {
+                                "type": "string",
+                                "format": "email"
+                            },
+                            "email_verified_at": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "api_token": {
+                                "type": "string",
+                                "format": "varchar(80)"
+                            },
+                            "provider": {
+                                "type": "string",
+                                "format": "varchar(191)"
+                            },
+                            "provider_id": {
+                                "type": "string",
+                                "format": "varchar(191)"
+                            },
+                            "role": {
+                                "type": "string",
+                                "format": "varchar(191)"
+                            },
+                            "created_at": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "updated_at": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    }
+                }
+            },
+            "Attribute": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "bigint(20)"
+                    },
+                    "name": {
+                        "type": "string",
+                        "format": "varchar(191)"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Status": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "bigint(20)"
+                    },
+                    "name": {
+                        "type": "string",
+                        "format": "varchar(191)"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "ApiResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Error message"
+                    }
+                }
+            },
+            "Entity": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "format": "bigint(20)"
+                            },
+                            "attribute_id": {
+                                "type": "integer",
+                                "format": "bigint(20)"
+                            },
+                            "parent_id": {
+                                "type": "integer",
+                                "format": "bigint(20)"
+                            },
+                            "display_order": {
+                                "type": "integer",
+                                "format": "bigint(20)"
+                            },
+                            "row_value": {
+                                "type": "text"
+                            },
+                            "status_id": {
+                                "type": "integer",
+                                "format": "bigint(20)"
+                            },
+                            "user_id": {
+                                "type": "integer",
+                                "format": "bigint(20)"
+                            },
+                            "created_at": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "updated_at": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "deleted_at": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    }
+                }
+            },
+            "Entities": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "results": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "format": "bigint(20)"
+                                        },
+                                        "attribute_id": {
+                                            "type": "integer",
+                                            "format": "bigint(20)"
+                                        },
+                                        "parent_id": {
+                                            "type": "integer",
+                                            "format": "bigint(20)"
+                                        },
+                                        "display_order": {
+                                            "type": "integer",
+                                            "format": "bigint(20)"
+                                        },
+                                        "row_value": {
+                                            "type": "text"
+                                        },
+                                        "status_id": {
+                                            "type": "integer",
+                                            "format": "bigint(20)"
+                                        },
+                                        "user_id": {
+                                            "type": "integer",
+                                            "format": "bigint(20)"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "deleted_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    }
+                                }
+                            },
+                            "meta": {
+                                "type": "object",
+                                "properties": {
+                                    "page": {
+                                        "type": "integer",
+                                        "format": "int11",
+                                        "example": "1"
+                                    },
+                                    "per_page": {
+                                        "type": "integer",
+                                        "format": "int11",
+                                        "example": "10"
+                                    },
+                                    "count": {
+                                        "type": "integer",
+                                        "format": "int11",
+                                        "example": "1"
+                                    },
+                                    "total_pages": {
+                                        "type": "integer",
+                                        "format": "int11",
+                                        "example": "1"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "ItemsCategories": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "results": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "format": "bigint(20)"
+                                        },
+                                        "attributes": {
+                                            "type": "object",
+                                            "properties": {
+                                                "show": {
+                                                    "type": "integer",
+                                                    "format": "int1"
+                                                },
+                                                "{attribute_name}": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "meta": {
+                                "type": "object",
+                                "properties": {
+                                    "page": {
+                                        "type": "integer",
+                                        "format": "int11",
+                                        "example": "1"
+                                    },
+                                    "per_page": {
+                                        "type": "integer",
+                                        "format": "int11",
+                                        "example": "10"
+                                    },
+                                    "count": {
+                                        "type": "integer",
+                                        "format": "int11",
+                                        "example": "1"
+                                    },
+                                    "total_pages": {
+                                        "type": "integer",
+                                        "format": "int11",
+                                        "example": "1"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "Pet": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Pet"
+                        }
+                    },
+                    "application/xml": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Pet"
+                        }
+                    }
+                },
+                "description": "Pet object that needs to be added to the store",
+                "required": true
+            },
+            "UserArray": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "description": "List of user object",
+                "required": true
+            }
+        },
+        "securitySchemes": {
+            "Bearer authentication": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "links": {},
+        "callbacks": {}
+    },
+    "security": []
+}
