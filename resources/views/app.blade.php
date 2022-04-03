@@ -22,6 +22,11 @@
         <img src="{{ asset('images/icons/logo.png') }}" alt="{{ config('app.name', 'Laravel') }}" >
       </div>
       <!-- Scripts -->
-      <script src="{{ asset('js/app.js') }}" defer></script>
+      <script type="text/javascript">
+        let url = window.location;
+        if(url.origin+'/' !== url.href){
+          window.location = url.origin;
+        }
+      </script>
     </body>
 </html>
