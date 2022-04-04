@@ -6,3 +6,6 @@ Create a profile and upload items detailed it with images and with its useful at
 - You can create dynamic categories and category attributes.
 - Use any front end view.
 - Admin role for administrators.
+- Include Vue.js frontend with Vuetify UI Library 
+
+## See also [finder Api Docs](https://petrospe.github.io/finder/).
