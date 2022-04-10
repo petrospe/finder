@@ -48,15 +48,15 @@
             "description": "Operations about entity status. Set the entity status"
         },
         {
-            "name": "auth/users",
+            "name": "users",
             "description": "Operations about users"
         }
     ],
     "paths": {
-        "/auth/login": {
+        "/login": {
             "post": {
                 "tags": [
-                    "auth/users"
+                    "users"
                 ],
                 "summary": "Logs user into the system",
                 "description": "",
@@ -130,10 +130,10 @@
                 }
             }
         },
-        "/auth/logout": {
+        "/logout": {
             "post": {
                 "tags": [
-                    "auth/users"
+                    "users"
                 ],
                 "summary": "Logs out current logged in user session",
                 "description": "",
@@ -363,7 +363,7 @@
                 "security": []
             }
         },
-        "/auth/users": {
+        "/users": {
             "get": {
                 "summary": "Get Subscribed users",
                 "description": "Show all subscribed users. Require admin user role.",
@@ -405,7 +405,7 @@
                     }
                 },
                 "tags": [
-                    "auth/users"
+                    "users"
                 ]
             },
             "post": {
@@ -476,7 +476,7 @@
                     }
                 },
                 "tags": [
-                    "auth/users"
+                    "users"
                 ],
                 "requestBody": {
                     "required": true,
@@ -505,7 +505,7 @@
                 }
             }
         },
-        "/auth/users/{Id}": {
+        "/users/{Id}": {
             "get": {
                 "summary": "Show user details",
                 "description": "Show user/subscriber details. Show details only for connected user. Admin users show all.",
@@ -554,7 +554,7 @@
                     }
                 },
                 "tags": [
-                    "auth/users"
+                    "users"
                 ]
             },
             "put": {
@@ -605,7 +605,7 @@
                     }
                 },
                 "tags": [
-                    "auth/users"
+                    "users"
                 ],
                 "requestBody": {
                     "required": true,
@@ -678,7 +678,7 @@
                     }
                 },
                 "tags": [
-                    "auth/users"
+                    "users"
                 ]
             }
         },
