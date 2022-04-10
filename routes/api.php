@@ -16,11 +16,11 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::post('auth/login', 'ApiController@login')->name('login');
-Route::post('auth/register', 'ApiController@register');
+Route::post('login', 'ApiController@login')->name('login');
+Route::post('register', 'ApiController@register');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
-    Route::post('auth/logout', 'ApiController@logout');
+    Route::post('logout', 'ApiController@logout');
 
     Route::group(['middleware' => 'admin'], function () {
       Route::apiResource('attributes', 'AttributeController');
@@ -34,7 +34,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
       Route::get('/optimize-db', 'HomeController@optimizeDatabase');
     });
 
-    Route::apiResource('auth/users', 'UserController');
+    Route::apiResource('users', 'UserController');
     /* Apiresource included routes */
     // Route::get('entities', 'EntityController@index');
     // Route::get('entities/{id}', 'EntityController@show');
