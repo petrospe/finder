@@ -30,7 +30,7 @@ Route::group(['middleware' => 'auth:api'], function () {
       Route::post('category/store', 'EntityController@storeCategory');
     });
 
-    Route::apiResource('auth/users', 'UserController');
+    Route::apiResource('users', 'Auth\UserController');
     /* Apiresource included routes */
     // Route::get('entities', 'EntityController@index');
     // Route::get('entities/{id}', 'EntityController@show');
