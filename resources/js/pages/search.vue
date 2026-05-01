@@ -28,6 +28,7 @@
       :align="alignment"
       :justify="justify"
       class="grey lighten-5"
+      v-if="!loading && !error && itemsSearch && itemsSearch.length"
     >
       <v-card
         v-for="itemSearch in itemsSearch"
@@ -51,6 +52,17 @@
           <v-btn @click="clear">clear</v-btn>
         </v-form>
 
+      </v-card>
+    </v-row>
+    <v-row
+      :align="alignment"
+      :justify="justify"
+      class="grey lighten-5"
+      style="height: 300px;"
+      v-if="!loading && !error && (!itemsSearch || !itemsSearch.length)"
+    >
+      <v-card class="pa-4">
+        No search fields found for this category.
       </v-card>
     </v-row>
   </v-col>
@@ -84,21 +96,19 @@ export default {
           router.go(-1);
         },
         fetchData() {
-            this.error = this.itemsSearch = null;
+            this.error = null;
+            this.itemsSearch = [];
             this.loading = true;
             axios
                 .get('/api/items/'+this.categoryid+'/search')
                 .then(response => {
-                  this.loading = false;
-                  this.itemsSearch = JSON.parse(JSON.stringify(response.data)).data.results;
-                  // console.log(categoryid);
-                  // debugger;
+                  this.itemsSearch = response?.data?.data?.results || [];
                 })
                 .catch(error => {
-                  this.loading = false;
-                  this.error = error.response.data.message || error.message;
+                  const apiMessage = error?.response?.data?.message;
+                  this.error = apiMessage || error.message || 'Failed to load search fields.';
                 })
-                // .finally(() => this.loading = false)
+                .finally(() => this.loading = false)
         },
         clear(){
         },

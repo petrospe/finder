@@ -6,14 +6,16 @@ import i18n from '~/plugins/i18n'
 
 // Request interceptor
 axios.interceptors.request.use(request => {
+  request.headers = request.headers || {}
+
   const token = store.getters['auth/token']
   if (token) {
-    request.headers.common['Authorization'] = `Bearer ${token}`
+    request.headers['Authorization'] = `Bearer ${token}`
   }
 
   const locale = store.getters['lang/locale']
   if (locale) {
-    request.headers.common['Accept-Language'] = locale
+    request.headers['Accept-Language'] = locale
   }
 
   // request.headers['X-Socket-Id'] = Echo.socketId()
@@ -23,7 +25,12 @@ axios.interceptors.request.use(request => {
 
 // Response interceptor
 axios.interceptors.response.use(response => response, error => {
-  const { status } = error.response
+  const status = error?.response?.status
+
+  // Network/CORS/offline errors do not include an HTTP response object.
+  if (!status) {
+    return Promise.reject(error)
+  }
 
   if (status >= 500) {
     Swal.fire({

@@ -29,6 +29,7 @@
       :justify="justify"
       class="grey lighten-5"
       style="height: 300px;"
+      v-if="!loading && !error && categoriesSearch && categoriesSearch.length"
     >
       <v-card
         v-for="categorySearch in categoriesSearch"
@@ -43,6 +44,17 @@
       <div class="subtitle-1">
         {{ categorySearch.attributes.description}}
       </div>
+      </v-card>
+    </v-row>
+    <v-row
+      :align="alignment"
+      :justify="justify"
+      class="grey lighten-5"
+      style="height: 300px;"
+      v-if="!loading && !error && (!categoriesSearch || !categoriesSearch.length)"
+    >
+      <v-card class="pa-4">
+        No categories found.
       </v-card>
     </v-row>
   </v-col>
@@ -69,19 +81,17 @@ export default {
     },
     methods: {
         fetchData() {
-            this.error = this.categoriesSearch = null;
+            this.error = null;
+            this.categoriesSearch = [];
             this.loading = true;
             axios
                 .get('/api/categories/search')
                 .then(response => {
-                  this.loading = false;
-                  this.categoriesSearch = JSON.parse(JSON.stringify(response.data)).data.results;
-                  console.log(this.categoriesSearch);
-                  // debugger;
+                  this.categoriesSearch = response?.data?.data?.results || [];
                 })
                 .catch(error => {
-                  this.loading = false;
-                  this.error = error.response.data.message || error.message;
+                  const apiMessage = error?.response?.data?.message;
+                  this.error = apiMessage || error.message || 'Failed to load categories.';
                 })
                 .finally(() => this.loading = false)
         }

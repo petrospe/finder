@@ -15,7 +15,7 @@ $config = [
   <title>{{ config('app.name', 'Laravel') }}</title>
   <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}"/>
 
-  <link rel="stylesheet" href="{{ mix('dist/css/app.css') }}">
+  <link rel="stylesheet" href="{{ mix('/dist/css/app.css') }}">
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
@@ -29,6 +29,6 @@ $config = [
   </script>
 
   {{-- Load the application scripts --}}
-  <script src="{{ mix('dist/js/app.js') }}"></script>
+  <script src="{{ mix('/dist/js/app.js') }}"></script>
 </body>
 </html>

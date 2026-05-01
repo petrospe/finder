@@ -15,7 +15,7 @@ class EntityController extends Controller
 
     public function __construct()
     {
-      $this->user = auth()->user();
+      //
     }
     /**
      * Display a listing of the resource.
@@ -57,7 +57,7 @@ class EntityController extends Controller
         'display_order' => $request->display_order,
         'row_value' => $request->row_value,
         'status_id' => $request->status_id,
-        'user_id' => $this->user->id,
+        'user_id' => auth()->id(),
       ]);
     }
 
@@ -213,7 +213,7 @@ class EntityController extends Controller
         'parent_id' => $parentEntityId,
         'attribute_id' => $entityAttribute->id,
         'status_id' => 1,
-        'user_id' => $this->user->id
+        'user_id' => auth()->id()
       ]);
       $entity->save();
       if($request->input()){
@@ -289,7 +289,7 @@ class EntityController extends Controller
             $input['type'] = $file->getClientMimeType();
             $input['path'] = $path;
             $input['size'] = $file->getClientSize();
-            $input['user_id'] = $this->user->id;
+            $input['user_id'] = auth()->id();
             $input['entity_id'] = $request->entity_id;
             $file = File::create($input);
 
