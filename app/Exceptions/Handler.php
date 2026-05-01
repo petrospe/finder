@@ -2,8 +2,9 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -29,34 +30,30 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param  \Throwable  $e
      * @return void
-     *
-     * @throws \Exception
      */
-    public function report(Exception $exception)
+    public function report(Throwable $e): void
     {
-        parent::report($exception);
+        parent::report($e);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Throwable  $e
      * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Exception
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $e): Response
     {
-        if ($exception instanceof \Illuminate\Foundation\Http\Exceptions\MaintenanceModeException) {
-            return response(!empty($exception->getMessage())?$exception->getMessage():"Service Unavailable", 503)
+        if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException && $e->getStatusCode() === 503) {
+            return response(!empty($e->getMessage()) ? $e->getMessage() : "Service Unavailable", 503)
                   ->header('Content-Type', 'text/plain');
         }
 
         $request->headers->set('Accept', 'application/json');
 
-        return parent::render($request, $exception);
+        return parent::render($request, $e);
     }
 }

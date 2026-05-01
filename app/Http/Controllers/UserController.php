@@ -9,16 +9,16 @@ use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
-    protected $isAdmin;
+    protected $isAdmin = false;
 
     public function __construct()
     {
-      $authUser = \JWTAuth::parseToken()->authenticate();
-      if($authUser->role=='admin'){
-        $this->isAdmin = true;
-      } else {
-        $this->isAdmin = false;
-      }
+      $this->middleware(function ($request, $next) {
+        $authUser = Auth::user();
+        $this->isAdmin = $authUser && $authUser->role === 'admin';
+
+        return $next($request);
+      });
     }
     /**
      * Display a listing of the resource.
